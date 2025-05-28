@@ -1,43 +1,46 @@
-import { Tabs } from 'expo-router';
-import React from 'react';
-import { Platform } from 'react-native';
-
-import { HapticTab } from '@/components/HapticTab';
-import { IconSymbol } from '@/components/ui/IconSymbol';
-import TabBarBackground from '@/components/ui/TabBarBackground';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
+import { Ionicons } from "@expo/vector-icons";
+import { Tabs } from "expo-router";
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: false,
-        tabBarButton: HapticTab,
-        tabBarBackground: TabBarBackground,
-        tabBarStyle: Platform.select({
-          ios: {
-            // Use a transparent background on iOS to show the blur effect
-            position: 'absolute',
-          },
-          default: {},
-        }),
-      }}>
+        tabBarActiveTintColor: "#8B4513",
+        tabBarInactiveTintColor: "#999",
+        headerStyle: {
+          backgroundColor: "#F5F5DC",
+        },
+        headerTintColor: "#8B4513",
+        tabBarStyle: {
+          backgroundColor: "#F5F5DC",
+          borderTopColor: "#E0E0E0",
+          height: 90,
+          borderTopLeftRadius: 20,
+          borderTopRightRadius: 20,
+          paddingBottom: 10,
+          shadowOpacity: 0.1,
+          shadowOffset: { width: 0, height: -2 },
+        },
+      }}
+    >
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+          title: "Reminder",
+          headerTitle: "Coffee Reminder",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="alarm-outline" size={size} color={color} />
+          ),
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="log"
         options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          title: "Coffee Log",
+          headerTitle: "My Coffee Log",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="list-outline" size={size} color={color} />
+          ),
         }}
       />
     </Tabs>

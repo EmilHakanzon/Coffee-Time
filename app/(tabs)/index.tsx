@@ -1,75 +1,148 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
-
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+import CoffeeTypeSelector from "@/components/CoffeeTypeSelector";
+import { COFFEE_TYPES } from "@/constants/CoffeeType";
+import { CoffeeType, type CoffeeLog } from "@/types/coffee";
+import { Ionicons } from "@expo/vector-icons";
+import React, { useEffect, useState } from "react";
+import { Alert, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import styles from "./HomeScreen.styles";
 
 export default function HomeScreen() {
+  const [selectedCoffeeType, setSelectedCoffeeType] = useState<CoffeeType>(
+    COFFEE_TYPES[0],
+  );
+  const [lastCoffeeTime, setLastCoffeeTime] = useState<Date | null>(null);
+  const [nextReminderTime, setNextReminderTime] = useState<Date | null>(null);
+  const [coffeeLog, setCoffeeLog] = useState<CoffeeLog[]>([]);
+
+  // reminder calculate
+  useEffect(() => {
+    if (lastCoffeeTime) {
+      const nextTime = new Date(lastCoffeeTime.getTime() + 4 * 60 * 60 * 1000);
+      setNextReminderTime(nextTime);
+    }
+  }, [lastCoffeeTime]);
+
+  const handleDrinkCoffee = () => {
+    const now = new Date();
+    const newLog: CoffeeLog = {
+      id: Date.now().toString(),
+      coffeeType: selectedCoffeeType,
+      timestamp: now,
+    };
+
+    setCoffeeLog((prev) => [newLog, ...prev]);
+    setLastCoffeeTime(now);
+
+    Alert.alert(
+      "Coffe Logged! ☕",
+      `Enjoyed your ${selectedCoffeeType.name}! Next reminder in 4 Hours`,
+    );
+  };
+
+  const formtTime = (date: Date) => {
+    return date.toLocaleTimeString("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    });
+  };
+
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return "Good Morning";
+    if (hour < 18) return "Good Afternoon";
+    return "Good Evening";
+  };
+
+  const formDate = (date: Date) => {
+    return date.toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+    });
+  };
+
+  const isReminderTime = () => {
+    if (!nextReminderTime) return false;
+    return new Date() >= nextReminderTime;
+  };
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+    <ScrollView style={styles.container}>
+      <View style={styles.greetingContainer}>
+        <Text style={styles.greetingText}>{getGreeting()} 👋</Text>
+      </View>
+      {/* Reminder Status */}
+      <View style={styles.content}>
+        <View
+          style={[
+            styles.statusCard,
+            isReminderTime() ? styles.reminderActive : styles.reminderInactive,
+          ]}
+        >
+          <Ionicons
+            name={isReminderTime() ? "alarm" : "time-outline"}
+            size={32}
+            color={isReminderTime() ? "#FF6B6B" : "#8B4513"}
+          />
+          <Text style={styles.statusTitle}>
+            {isReminderTime() ? "Time for Coffee!" : "Next Coffee"}
+          </Text>
+          <Text style={styles.statuTime}>
+            {nextReminderTime ? formtTime(nextReminderTime) : "--:--"}
+          </Text>
+        </View>
+        {/* Last Coffe */}
+        {lastCoffeeTime && (
+          <View style={styles.LastCoffeCard}>
+            <Text style={styles.lastCoffeeLabel}>Last Coffee</Text>
+            <Text style={styles.lastCoffeeType}>
+              {coffeeLog[0]?.coffeeType.name}
+            </Text>
+            <Text style={styles.lastCoffeeTime}>
+              {formDate(lastCoffeeTime)} at {formtTime(lastCoffeeTime)}
+            </Text>
+          </View>
+        )}
+
+        {/* Coffee Select */}
+        <View style={styles.selectorContainer}>
+          <Text style={styles.selectorLabel}>Choose Your Coffee ☕</Text>
+          <CoffeeTypeSelector
+            coffeeTypes={COFFEE_TYPES}
+            selectedType={selectedCoffeeType}
+            onSelect={setSelectedCoffeeType}
+          />
+        </View>
+
+        {/* Drink BUtton */}
+        <TouchableOpacity
+          style={styles.drinkButton}
+          onPress={handleDrinkCoffee}
+        >
+          <Ionicons name="cafe" size={24} color="#FFFFFF" />
+          <Text style={styles.drinkButtonText}>
+            I Just Had {selectedCoffeeType.name}
+          </Text>
+        </TouchableOpacity>
+
+        {/* Recent Coffe Summary */}
+        {coffeeLog.length > 0 && (
+          <View style={styles.summaryCard}>
+            <Text style={styles.summaryTitle}>Today's Coffee</Text>
+            <Text style={styles.summaryCount}>
+              {
+                coffeeLog.filter(
+                  (log) =>
+                    new Date(log.timestamp).toDateString() ===
+                    new Date().toDateString(),
+                ).length
+              }{" "}
+              {""}
+              Cups
+            </Text>
+          </View>
+        )}
+      </View>
+    </ScrollView>
   );
 }
-
-const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
-});

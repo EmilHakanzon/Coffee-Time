@@ -28,6 +28,9 @@ export default function TabLayout() {
         options={{
           title: "Start",
           headerTitle: "",
+          tabBarStyle: { display: "none" },
+          headerTransparent: true, // <-- transparent header
+          headerStyle: { backgroundColor: "transparent" },
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="alarm-outline" size={size} color={color} />
           ),

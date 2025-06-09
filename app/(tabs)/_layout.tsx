@@ -29,7 +29,7 @@ export default function TabLayout() {
           title: "Start",
           headerTitle: "",
           tabBarStyle: { display: "none" },
-          headerTransparent: true, // <-- transparent header
+          headerTransparent: true, // <-- transparent header for index file.
           headerStyle: { backgroundColor: "transparent" },
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="alarm-outline" size={size} color={color} />

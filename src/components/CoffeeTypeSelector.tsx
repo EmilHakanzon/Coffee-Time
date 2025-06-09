@@ -1,16 +1,9 @@
 import { Picker } from "@react-native-picker/picker";
-import React, { useEffect, useState } from "react";
-import {
-  Image,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
-
-import { CoffeeType } from "../types/coffee";
+import React, { useState } from "react";
+import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { useCoffeeTypes } from "../hooks/useCoffeeTypes";
 import styles from "../styles/CoffeeTypeSelector";
-
+import { CoffeeType } from "../types/coffee";
 interface CoffeeTypeSelectorProps {
   selectedType: CoffeeType | null;
   onSelect: (type: CoffeeType) => void;
@@ -20,33 +13,9 @@ export default function CoffeeTypeSelector({
   selectedType,
   onSelect,
 }: CoffeeTypeSelectorProps) {
-  const [hotCoffees, setHotCoffees] = useState<CoffeeType[]>([]);
-  const [icedCoffees, setIcedCoffees] = useState<CoffeeType[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { hotCoffees, icedCoffees, loading } = useCoffeeTypes();
   const [category, setCategory] = useState<"hot" | "ice">("hot");
   const [imgErrors, setImgErrors] = useState<{ [id: number]: boolean }>({});
-
-  useEffect(() => {
-    setLoading(true);
-    Promise.all([
-      fetch("https://api.sampleapis.com/coffee/hot").then((res) => res.json()),
-      fetch("https://api.sampleapis.com/coffee/iced").then((res) => res.json()),
-    ]).then(([hotData, icedData]) => {
-      // Filter out unwanted IDs for hot
-      const filteredHot = hotData.filter(
-        (item: CoffeeType) =>
-          ![17, 18, 19, 20, 28, 26, 25].includes(Number(item.id)),
-      );
-      // Filter out unwanted IDs for iced (if needed, or just use all)
-      const filteredIced = icedData.filter(
-        (item: CoffeeType) =>
-          ![17, 18, 19, 20, 28, 26, 25].includes(Number(item.id)),
-      );
-      setHotCoffees(filteredHot);
-      setIcedCoffees(filteredIced);
-      setLoading(false);
-    });
-  }, []);
 
   const coffeeTypes = category === "hot" ? hotCoffees : icedCoffees;
 

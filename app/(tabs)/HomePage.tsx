@@ -39,6 +39,13 @@ export default function HomeScreen() {
       `Enjoyed your ${selectedCoffeeType.title}! Next reminder in 4 Hours`,
     );
   };
+  
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return "Good Morning";
+    if (hour < 18) return "Good Afternoon";
+    return "Good Evening";
+  };
 
   const formtTime = (date: Date) => {
     return date.toLocaleTimeString("en-US", {
@@ -46,13 +53,6 @@ export default function HomeScreen() {
       minute: "2-digit",
       hour12: false,
     });
-  };
-
-  const getGreeting = () => {
-    const hour = new Date().getHours();
-    if (hour < 12) return "Good Morning";
-    if (hour < 18) return "Good Afternoon";
-    return "Good Evening";
   };
 
   const formDate = (date: Date) => {

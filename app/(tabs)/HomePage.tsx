@@ -1,6 +1,7 @@
 import CoffeeTypeSelector from "@/src/components/CoffeeTypeSelector";
 import { CoffeeType, type CoffeeLog } from "@/src/types/coffee";
 import { Ionicons } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
 import { Alert, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import styles from "../../src/styles/HomeScreen.styles";
@@ -10,22 +11,33 @@ import {
   getGreeting,
   isReminderTime,
 } from "../../src/utils/homeUtils";
-
 export default function HomeScreen() {
   const [selectedCoffeeType, setSelectedCoffeeType] =
     useState<CoffeeType | null>(null);
   const [lastCoffeeTime, setLastCoffeeTime] = useState<Date | null>(null);
   const [nextReminderTime, setNextReminderTime] = useState<Date | null>(null);
   const [coffeeLog, setCoffeeLog] = useState<CoffeeLog[]>([]);
+  const [reminderHours, setReminderHours] = useState(4);
+  const [userName, setUserName] = useState("");
+
+  useEffect(() => {
+    (async () => {
+      const savedReminder = await AsyncStorage.getItem("reminder_hours");
+      const saveName = await AsyncStorage.getItem("profile_name");
+      if (saveName) setUserName(saveName);
+      if (savedReminder) setReminderHours(Number(savedReminder));
+    })();
+  }, []);
 
   // reminder calculate
-  //TODO: Dynamik ?
   useEffect(() => {
     if (lastCoffeeTime) {
-      const nextTime = new Date(lastCoffeeTime.getTime() + 4 * 60 * 60 * 1000);
+      const nextTime = new Date(
+        lastCoffeeTime.getTime() + reminderHours * 60 * 60 * 1000,
+      );
       setNextReminderTime(nextTime);
     }
-  }, [lastCoffeeTime]);
+  }, [lastCoffeeTime, reminderHours]);
 
   const handleDrinkCoffee = () => {
     if (!selectedCoffeeType) {
@@ -44,7 +56,7 @@ export default function HomeScreen() {
 
     Alert.alert(
       "Coffe Logged! ☕",
-      `Enjoyed your ${selectedCoffeeType.title}! Next reminder in 4 Hours`,
+      `Enjoyed your ${selectedCoffeeType.title}! Next reminder in ${reminderHours} hour`,
     );
   };
 
@@ -52,6 +64,9 @@ export default function HomeScreen() {
     <ScrollView style={styles.container}>
       <View style={styles.greetingContainer}>
         <Text style={styles.greetingText}>{getGreeting()} 👋</Text>
+        {userName ? (
+          <Text style={styles.greetingName}>{userName}</Text>
+        ) : null}
       </View>
       {/* Reminder Status */}
       <View style={styles.content}>

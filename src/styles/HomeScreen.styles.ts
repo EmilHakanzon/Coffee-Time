@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     padding: 24,
     alignItems: "center",
-    marginBottom: 20,
+    marginBottom: 15,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
@@ -127,6 +127,14 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     color: "#8B4513",
     letterSpacing: 1,
+    textAlign: "center",
+  },
+  greetingName: {
+    fontSize: 22,
+    fontWeight: "600",
+    color: "#8B4513",
+    textAlign: "center",
+    textDecorationLine: "underline",
   },
 });
 

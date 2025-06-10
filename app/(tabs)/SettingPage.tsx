@@ -1,5 +1,6 @@
 import { useCoffeeTypes } from "@/src/hooks/useCoffeeTypes";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Slider from "@react-native-community/slider";
 import { Picker } from "@react-native-picker/picker";
 import React, { useEffect, useState } from "react";
 import { Alert, Button, StyleSheet, Text, TextInput, View } from "react-native";
@@ -13,6 +14,7 @@ export default function SettingPage() {
   const [favorite, setFavorite] = useState("");
   const [showCountryPicker, setShowCountryPicker] = useState(false);
   const { hotCoffees, icedCoffees, loading } = useCoffeeTypes();
+  const [reminderHours, setReminderHours] = useState(4); 
 
   const allCoffees = [...hotCoffees, ...icedCoffees];
 
@@ -22,9 +24,11 @@ export default function SettingPage() {
       const savedName = await AsyncStorage.getItem("profile_name");
       const savedCountry = await AsyncStorage.getItem("profile_country");
       const savedFavorite = await AsyncStorage.getItem("profile_favorite");
+      const saveReminder = await AsyncStorage.getItem("reminder_hours");
       if (savedName) setName(savedName);
       if (savedCountry) setCountry(savedCountry);
       if (savedFavorite) setFavorite(savedFavorite);
+      if (saveReminder) setReminderHours(Number(saveReminder));
     })();
   }, []);
 
@@ -33,6 +37,7 @@ export default function SettingPage() {
     await AsyncStorage.setItem("profile_name", name);
     await AsyncStorage.setItem("profile_country", country);
     await AsyncStorage.setItem("profile_favorite", favorite);
+    await AsyncStorage.setItem("reminder_hours", reminderHours.toString());
     Alert.alert("Profile saved!");
   };
 
@@ -78,6 +83,18 @@ export default function SettingPage() {
           ))}
         </Picker>
       )}
+      <Text style={styles.label}>Coffee Reminder (hours): {reminderHours}</Text>
+      <Slider
+        style={{ width: "100%", height: 40 }}
+        minimumValue={1}
+        maximumValue={12}
+        step={1}
+        value={reminderHours}
+        onValueChange={setReminderHours}
+        minimumTrackTintColor="#8B4513"
+        maximumTrackTintColor="#ccc"
+        thumbTintColor="#8B4513"
+      />
 
       <Button title="Save profile" onPress={saveProfile} />
     </View>

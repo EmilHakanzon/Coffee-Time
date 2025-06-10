@@ -1,6 +1,13 @@
 import { Picker } from "@react-native-picker/picker";
 import React, { useState } from "react";
-import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import {
+  ActivityIndicator,
+  Image,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { useCoffeeTypes } from "../hooks/useCoffeeTypes";
 import styles from "../styles/CoffeeTypeSelector";
 import { CoffeeType } from "../types/coffee";
@@ -29,44 +36,52 @@ export default function CoffeeTypeSelector({
         <Picker.Item label="Hot Coffee" value="hot" />
         <Picker.Item label="Iced Coffee" value="ice" />
       </Picker>
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.container}
-      >
-        {coffeeTypes.map((coffeeType) => (
-          <TouchableOpacity
-            key={coffeeType.id}
-            style={[
-              styles.typeButton,
-              selectedType?.id === coffeeType.id && styles.selectedType,
-            ]}
-            onPress={() => onSelect(coffeeType)}
-          >
-            {imgErrors[Number(coffeeType.id)] || !coffeeType.image ? (
-              <Text style={{ fontSize: 48, marginBottom: 8 }}>☕</Text>
-            ) : (
-              <Image
-                source={{ uri: coffeeType.image }}
-                style={styles.typeImage}
-                resizeMode="cover"
-                onError={() =>
-                  setImgErrors((prev) => ({ ...prev, [coffeeType.id]: true }))
-                }
-              />
-            )}
-            <Text
+      {loading ? (
+        <ActivityIndicator
+          size="large"
+          color="#8B4513"
+          style={{ marginTop: 24 }}
+        />
+      ) : (
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.container}
+        >
+          {coffeeTypes.map((coffeeType) => (
+            <TouchableOpacity
+              key={coffeeType.id}
               style={[
-                styles.typeName,
-                selectedType?.id === coffeeType.id && styles.selectedTypeName,
+                styles.typeButton,
+                selectedType?.id === coffeeType.id && styles.selectedType,
               ]}
-              numberOfLines={2}
+              onPress={() => onSelect(coffeeType)}
             >
-              {coffeeType.title}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
+              {imgErrors[Number(coffeeType.id)] || !coffeeType.image ? (
+                <Text style={{ fontSize: 48, marginBottom: 8 }}>☕</Text>
+              ) : (
+                <Image
+                  source={{ uri: coffeeType.image }}
+                  style={styles.typeImage}
+                  resizeMode="cover"
+                  onError={() =>
+                    setImgErrors((prev) => ({ ...prev, [coffeeType.id]: true }))
+                  }
+                />
+              )}
+              <Text
+                style={[
+                  styles.typeName,
+                  selectedType?.id === coffeeType.id && styles.selectedTypeName,
+                ]}
+                numberOfLines={2}
+              >
+                {coffeeType.title}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
+      )}
     </View>
   );
 }

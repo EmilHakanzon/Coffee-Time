@@ -1,15 +1,19 @@
 import CoffeeTypeSelector from "@/src/components/CoffeeTypeSelector";
-import { COFFEE_TYPES } from "@/src/constants/CoffeeType";
 import { CoffeeType, type CoffeeLog } from "@/src/types/coffee";
 import { Ionicons } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
 import { Alert, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import styles from "../../src/styles/HomeScreen.styles";
+import {
+  formDate,
+  formtTime,
+  getGreeting,
+  isReminderTime,
+} from "../../src/utils/homeUtils";
 
 export default function HomeScreen() {
-  const [selectedCoffeeType, setSelectedCoffeeType] = useState<CoffeeType>(
-    COFFEE_TYPES[0],
-  );
+  const [selectedCoffeeType, setSelectedCoffeeType] =
+    useState<CoffeeType | null>(null);
   const [lastCoffeeTime, setLastCoffeeTime] = useState<Date | null>(null);
   const [nextReminderTime, setNextReminderTime] = useState<Date | null>(null);
   const [coffeeLog, setCoffeeLog] = useState<CoffeeLog[]>([]);
@@ -24,6 +28,10 @@ export default function HomeScreen() {
   }, [lastCoffeeTime]);
 
   const handleDrinkCoffee = () => {
+    if (!selectedCoffeeType) {
+      Alert.alert("Please select a coffee type before logging!");
+      return;
+    }
     const now = new Date();
     const newLog: CoffeeLog = {
       id: Date.now().toString(),
@@ -39,33 +47,6 @@ export default function HomeScreen() {
       `Enjoyed your ${selectedCoffeeType.title}! Next reminder in 4 Hours`,
     );
   };
-  
-  const getGreeting = () => {
-    const hour = new Date().getHours();
-    if (hour < 12) return "Good Morning";
-    if (hour < 18) return "Good Afternoon";
-    return "Good Evening";
-  };
-
-  const formtTime = (date: Date) => {
-    return date.toLocaleTimeString("en-US", {
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: false,
-    });
-  };
-
-  const formDate = (date: Date) => {
-    return date.toLocaleDateString("en-US", {
-      month: "short",
-      day: "numeric",
-    });
-  };
-
-  const isReminderTime = () => {
-    if (!nextReminderTime) return false;
-    return new Date() >= nextReminderTime;
-  };
 
   return (
     <ScrollView style={styles.container}>
@@ -77,16 +58,20 @@ export default function HomeScreen() {
         <View
           style={[
             styles.statusCard,
-            isReminderTime() ? styles.reminderActive : styles.reminderInactive,
+            isReminderTime(nextReminderTime)
+              ? styles.reminderActive
+              : styles.reminderInactive,
           ]}
         >
           <Ionicons
-            name={isReminderTime() ? "alarm" : "time-outline"}
+            name={isReminderTime(nextReminderTime) ? "alarm" : "time-outline"}
             size={32}
-            color={isReminderTime() ? "#FF6B6B" : "#8B4513"}
+            color={isReminderTime(nextReminderTime) ? "#FF6B6B" : "#8B4513"}
           />
           <Text style={styles.statusTitle}>
-            {isReminderTime() ? "Time for Coffee!" : "Next Coffee"}
+            {isReminderTime(nextReminderTime)
+              ? "Time for Coffee!"
+              : "Next Coffee"}
           </Text>
           <Text style={styles.statuTime}>
             {nextReminderTime ? formtTime(nextReminderTime) : "--:--"}
@@ -121,7 +106,8 @@ export default function HomeScreen() {
         >
           <Ionicons name="cafe" size={24} color="#FFFFFF" />
           <Text style={styles.drinkButtonText}>
-            I Just Had {selectedCoffeeType.title}
+            I Just Had{" "}
+            {selectedCoffeeType ? selectedCoffeeType.title : "a coffee"}
           </Text>
         </TouchableOpacity>
 

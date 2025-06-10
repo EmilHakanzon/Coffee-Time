@@ -1,5 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
-import { Tabs } from "expo-router";
+import { router, Tabs } from "expo-router";
+import { TouchableOpacity } from "react-native";
 
 export default function TabLayout() {
   return (
@@ -39,10 +40,46 @@ export default function TabLayout() {
       <Tabs.Screen
         name="HomePage"
         options={{
-          title: "HomePage",
-          headerTitle: "My Coffee Log",
+          title: "Home",
+          headerTitle: "Home",
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="home-outline" size={size} color={color} />
+          ),
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => router.back()}>
+              <Ionicons name="arrow-back" size={35} color="#222" />
+            </TouchableOpacity>
+          ),
+        }}
+      />
+
+      <Tabs.Screen
+        name="LogPage"
+        options={{
+          title: "Logs",
+          headerTitle: "Logs",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="newspaper-outline" size={size} color={color} />
+          ),
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => router.back()}>
+              <Ionicons name="arrow-back" size={35} color="#222" />
+            </TouchableOpacity>
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="SettingPage"
+        options={{
+          title: "Setting",
+          headerTitle: "Setting",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="settings-outline" size={size} color={color} />
+          ),
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => router.back()}>
+              <Ionicons name="arrow-back" size={35} color="#222" />
+            </TouchableOpacity>
           ),
         }}
       />

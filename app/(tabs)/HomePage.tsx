@@ -28,8 +28,10 @@ export default function HomeScreen() {
       (async () => {
         const savedReminder = await AsyncStorage.getItem("reminder_hours");
         const saveName = await AsyncStorage.getItem("profile_name");
+        const saveLog = await AsyncStorage.getItem("coffee_log");
         if (saveName) setUserName(saveName);
         if (savedReminder) setReminderHours(Number(savedReminder));
+        if (saveLog) setCoffeeLog(JSON.parse(saveLog));
       })();
     }, []),
   );
@@ -44,7 +46,7 @@ export default function HomeScreen() {
     }
   }, [lastCoffeeTime, reminderHours]);
 
-  const handleDrinkCoffee = () => {
+  const handleDrinkCoffee = async () => {
     if (!selectedCoffeeType) {
       Alert.alert("Please select a coffee type before logging!");
       return;
@@ -55,9 +57,11 @@ export default function HomeScreen() {
       coffeeType: selectedCoffeeType,
       timestamp: now,
     };
-
-    setCoffeeLog((prev) => [newLog, ...prev]);
+    // Uppdetera loggen i AyncStorage, hämtar den gamla coffeeLog
+    const updatedLog = [newLog, ...coffeeLog];
+    setCoffeeLog(updatedLog);
     setLastCoffeeTime(now);
+    await AsyncStorage.setItem("coffee_log", JSON.stringify(updatedLog));
 
     Alert.alert(
       "Coffe Logged! ☕",

@@ -2,6 +2,7 @@ import CoffeeTypeSelector from "@/src/components/CoffeeTypeSelector";
 import { CoffeeType, type CoffeeLog } from "@/src/types/coffee";
 import { Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useFocusEffect } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
 import { Alert, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import styles from "../../src/styles/HomeScreen.styles";
@@ -20,14 +21,18 @@ export default function HomeScreen() {
   const [reminderHours, setReminderHours] = useState(4);
   const [userName, setUserName] = useState("");
 
-  useEffect(() => {
-    (async () => {
-      const savedReminder = await AsyncStorage.getItem("reminder_hours");
-      const saveName = await AsyncStorage.getItem("profile_name");
-      if (saveName) setUserName(saveName);
-      if (savedReminder) setReminderHours(Number(savedReminder));
-    })();
-  }, []);
+  // denna hook körs varje gång homepage blir aktiv och då
+  //hämtar den om på nytt.
+  useFocusEffect(
+    React.useCallback(() => {
+      (async () => {
+        const savedReminder = await AsyncStorage.getItem("reminder_hours");
+        const saveName = await AsyncStorage.getItem("profile_name");
+        if (saveName) setUserName(saveName);
+        if (savedReminder) setReminderHours(Number(savedReminder));
+      })();
+    }, []),
+  );
 
   // reminder calculate
   useEffect(() => {
@@ -64,9 +69,7 @@ export default function HomeScreen() {
     <ScrollView style={styles.container}>
       <View style={styles.greetingContainer}>
         <Text style={styles.greetingText}>{getGreeting()} 👋</Text>
-        {userName ? (
-          <Text style={styles.greetingName}>{userName}</Text>
-        ) : null}
+        {userName ? <Text style={styles.greetingName}>{userName}</Text> : null}
       </View>
       {/* Reminder Status */}
       <View style={styles.content}>

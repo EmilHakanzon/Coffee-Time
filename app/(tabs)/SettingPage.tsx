@@ -1,12 +1,12 @@
+import CountrySelector from "@/src/components/CountrySelector";
+import ProfileInput from "@/src/components/ProfileInput";
+import ReminderSlider from "@/src/components/ReminderSlider";
 import { useCoffeeTypes } from "@/src/hooks/useCoffeeTypes";
+import styles from "@/src/styles/settingPage";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import Slider from "@react-native-community/slider";
 import { Picker } from "@react-native-picker/picker";
 import React, { useEffect, useState } from "react";
-import { Alert, Button, StyleSheet, Text, TextInput, View } from "react-native";
-import CountryPicker, {
-  type CountryCode,
-} from "react-native-country-picker-modal";
+import { Text, TouchableOpacity, View } from "react-native";
 
 export default function SettingPage() {
   const [name, setName] = useState("");
@@ -14,7 +14,8 @@ export default function SettingPage() {
   const [favorite, setFavorite] = useState("");
   const [showCountryPicker, setShowCountryPicker] = useState(false);
   const { hotCoffees, icedCoffees, loading } = useCoffeeTypes();
-  const [reminderHours, setReminderHours] = useState(4); 
+  const [reminderHours, setReminderHours] = useState(4);
+  const [saved, setSaved] = useState(false);
 
   const allCoffees = [...hotCoffees, ...icedCoffees];
 
@@ -38,77 +39,50 @@ export default function SettingPage() {
     await AsyncStorage.setItem("profile_country", country);
     await AsyncStorage.setItem("profile_favorite", favorite);
     await AsyncStorage.setItem("reminder_hours", reminderHours.toString());
-    Alert.alert("Profile saved!");
+    setSaved(true);
+    setTimeout(() => setSaved(false), 2000);
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>Name</Text>
-      <TextInput
-        style={styles.input}
-        value={name}
-        onChangeText={setName}
-        placeholder="Name..."
-      />
-
-      <Text style={styles.label}>Country</Text>
-      <View style={{ marginBottom: 16 }}>
-        <CountryPicker
-          countryCode={country as CountryCode}
-          withFlag
-          withCountryNameButton
-          withFilter
-          onSelect={(c) => setCountry(c.cca2)}
-          visible={showCountryPicker}
-          onClose={() => setShowCountryPicker(false)}
+      <Text style={styles.header}>Profile Settings</Text>
+      <View style={styles.card}>
+        <ProfileInput value={name} onChangeText={setName} />
+        <Text style={styles.label}>Country</Text>
+          <CountrySelector
+            country={country}
+            setCountry={setCountry}
+            showPicker={showCountryPicker}
+            setShowPicker={setShowCountryPicker}
+          />
+        <Text style={styles.label}>Favorite Coffee</Text>
+        {loading ? (
+          <Text style={{ color: "#8B4513" }}>Loading Coffees...</Text>
+        ) : (
+          <Picker
+            selectedValue={favorite}
+            onValueChange={setFavorite}
+            style={styles.input}
+          >
+            <Picker.Item label="Select CoffeeTyp..." value="" />
+            {allCoffees.map((coffee) => (
+              <Picker.Item
+                key={coffee.id}
+                label={coffee.title}
+                value={coffee.title}
+              />
+            ))}
+          </Picker>
+        )}
+        <ReminderSlider
+          reminderHours={reminderHours}
+          setReminderHours={setReminderHours}
         />
+        <TouchableOpacity style={styles.saveButton} onPress={saveProfile}>
+          <Text style={styles.saveButtonText}>Save profile</Text>
+        </TouchableOpacity>
+        {saved && <Text style={styles.savedText}>Profile saved!</Text>}
       </View>
-
-      <Text style={styles.label}>Favorite Coffee</Text>
-      {loading ? (
-        <Text>Loading Coffees...</Text>
-      ) : (
-        <Picker
-          selectedValue={favorite}
-          onValueChange={setFavorite}
-          style={styles.input}
-        >
-          <Picker.Item label="Select CoffeeTyp..." value="" />
-          {allCoffees.map((coffee) => (
-            <Picker.Item
-              key={coffee.id}
-              label={coffee.title}
-              value={coffee.title}
-            />
-          ))}
-        </Picker>
-      )}
-      <Text style={styles.label}>Coffee Reminder (hours): {reminderHours}</Text>
-      <Slider
-        style={{ width: "100%", height: 40 }}
-        minimumValue={1}
-        maximumValue={12}
-        step={1}
-        value={reminderHours}
-        onValueChange={setReminderHours}
-        minimumTrackTintColor="#8B4513"
-        maximumTrackTintColor="#ccc"
-        thumbTintColor="#8B4513"
-      />
-
-      <Button title="Save profile" onPress={saveProfile} />
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: { flex: 1, padding: 24, backgroundColor: "#fff" },
-  label: { fontWeight: "bold", marginTop: 16, marginBottom: 4 },
-  input: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 8,
-    padding: 10,
-    backgroundColor: "#f9f9f9",
-  },
-});

@@ -31,7 +31,7 @@ export default function CoffeeTypeSelector({
       <Picker
         selectedValue={category}
         onValueChange={(value) => setCategory(value)}
-        style={{ marginBottom: 12 }}
+        style={{ marginBottom: 12, }}
       >
         <Picker.Item label="Hot Coffee" value="hot" />
         <Picker.Item label="Iced Coffee" value="ice" />

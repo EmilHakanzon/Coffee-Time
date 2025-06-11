@@ -6,6 +6,9 @@ import { FlatList, Image, StyleSheet, Text, View } from "react-native";
 
 export default function LogPage() {
   const [coffeeLog, setCoffeeLog] = useState<CoffeeLog[]>([]);
+  const [period, setPeriod] = useState<"day" | "week" | "month" | "year">(
+    "day",
+  );
 
   useFocusEffect(() => {
     (async () => {
@@ -13,11 +16,81 @@ export default function LogPage() {
       if (saved) setCoffeeLog(JSON.parse(saved));
     })();
   });
+
+  // filtera loggen efter period
+  const now = new Date();
+  const filteredLog = coffeeLog.filter((log) => {
+    const date = new Date(log.timestamp);
+    if (period === "day") {
+      return (
+        date.getFullYear() === now.getFullYear() &&
+        date.getMonth() === now.getMonth() &&
+        date.getDate() === now.getDate()
+      );
+    }
+    if (period === "week") {
+      // Hitta veckans första dag (måndag)
+      const dayOfWeek = now.getDay() === 0 ? 6 : now.getDay() - 1; // Gör söndag till 6, måndag till 0
+      const startOfWeek = new Date(now);
+      startOfWeek.setHours(0, 0, 0, 0);
+      startOfWeek.setDate(now.getDate() - dayOfWeek);
+
+      const endOfWeek = new Date(startOfWeek);
+      endOfWeek.setDate(startOfWeek.getDate() + 6);
+      endOfWeek.setHours(23, 59, 59, 999);
+
+      return date >= startOfWeek && date <= endOfWeek;
+    }
+    if (period === "month") {
+      return (
+        date.getFullYear() === now.getFullYear() &&
+        date.getMonth() === now.getMonth()
+      );
+    }
+    if (period === "year") {
+      return date.getFullYear() === now.getFullYear();
+    }
+    return true;
+  });
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Coffee Log ☕</Text>
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "center",
+          marginBottom: 16,
+        }}
+      >
+        {["day", "week", "month", "year"].map((p) => (
+          <Text
+            key={p}
+            onPress={() => setPeriod(p as any)}
+            style={{
+              marginHorizontal: 8,
+              padding: 6,
+              borderBottomWidth: period === p ? 2 : 0,
+              borderColor: "#8B4513",
+              color: period === p ? "#8B4513" : "#888",
+              fontWeight: period === p ? "bold" : "normal",
+            }}
+          >
+            {p.charAt(0).toUpperCase() + p.slice(1)}
+          </Text>
+        ))}
+      </View>
+      <Text
+        style={{
+          textAlign: "center",
+          marginBottom: 8,
+          color: "#8B4513",
+          fontWeight: "bold",
+        }}
+      >
+        {filteredLog.length} cup(s) this {period}
+      </Text>
       <FlatList
-        data={coffeeLog}
+        data={filteredLog}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <View style={styles.logItem}>

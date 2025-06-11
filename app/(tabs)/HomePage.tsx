@@ -31,7 +31,19 @@ export default function HomeScreen() {
         const saveLog = await AsyncStorage.getItem("coffee_log");
         if (saveName) setUserName(saveName);
         if (savedReminder) setReminderHours(Number(savedReminder));
-        if (saveLog) setCoffeeLog(JSON.parse(saveLog));
+        if (saveLog) {
+          const parsedLog = JSON.parse(saveLog);
+          setCoffeeLog(parsedLog);
+          // senaste kaffe tiden om man har loggats
+          if (parsedLog.length > 0) {
+            setLastCoffeeTime(new Date(parsedLog[0].timestamp));
+          } else {
+            setLastCoffeeTime(null);
+          }
+        } else {
+          setCoffeeLog([]);
+          setLastCoffeeTime(null);
+        }
       })();
     }, []),
   );

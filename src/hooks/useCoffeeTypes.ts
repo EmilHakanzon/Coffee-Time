@@ -22,6 +22,11 @@ export function useCoffeeTypes() {
       );
       setHotCoffees(filteredHot);
       setIcedCoffees(filteredIced);
+    })
+    .catch((error) => {
+      console.error("Error fetching coffee types:", error);
+    })
+    .finally(() => {
       setLoading(false);
     });
   }, []);

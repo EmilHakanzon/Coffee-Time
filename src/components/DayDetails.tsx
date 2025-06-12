@@ -1,7 +1,8 @@
-import React from "react";
-import { ScrollView, Text, View, Image, TouchableOpacity } from "react-native";
 import styles from "@/src/styles/LogPage";
 import { CoffeeLog } from "@/src/types/coffee";
+import { Ionicons } from "@expo/vector-icons";
+import React from "react";
+import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 
 export default function DayDetails({
   dateKey,
@@ -14,6 +15,11 @@ export default function DayDetails({
 }) {
   return (
     <ScrollView style={styles.dayDetails}>
+      <TouchableOpacity onPress={onBack}>
+        <Text style={{ color: "#8B4513",  }}>
+          <Ionicons name="arrow-back" size={10} color="#8B4513" /> {""}Go Back
+        </Text>
+      </TouchableOpacity>
       <Text style={styles.dayTitle}>Details for {dateKey}</Text>
       {logs.map((log) => (
         <View key={log.id} style={styles.logItem}>
@@ -34,9 +40,6 @@ export default function DayDetails({
           </View>
         </View>
       ))}
-      <TouchableOpacity onPress={onBack}>
-        <Text style={{ color: "#8B4513", marginTop: 10 }}>Go Back</Text>
-      </TouchableOpacity>
     </ScrollView>
   );
 }

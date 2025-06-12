@@ -68,6 +68,21 @@ export default function TabLayout() {
           ),
         }}
       />
+            <Tabs.Screen
+              name="CoffeTypePage"
+              options={{
+                title: "Coffee Types",
+                headerTitle: "Coffee Types",
+                tabBarIcon: ({ color, size }) => (
+                  <Ionicons name="cafe-outline" size={size} color={color} />
+                ),
+                headerLeft: () => (
+                  <TouchableOpacity onPress={() => router.back()}>
+                    <Ionicons name="arrow-back" size={35} color="#222" />
+                  </TouchableOpacity>
+                ),
+              }}
+            />
       <Tabs.Screen
         name="SettingPage"
         options={{

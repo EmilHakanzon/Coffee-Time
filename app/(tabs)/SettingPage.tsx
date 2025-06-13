@@ -1,6 +1,6 @@
-import CountrySelector from "@/src/components/CountrySelector";
-import ProfileInput from "@/src/components/ProfileInput";
-import ReminderSlider from "@/src/components/ReminderSlider";
+import CountrySelector from "@/src/components/setting/CountrySelector";
+import ProfileInput from "@/src/components/setting/ProfileInput";
+import ReminderSlider from "@/src/components/setting/ReminderSlider";
 import { useCoffeeTypes } from "@/src/hooks/useCoffeeTypes";
 import styles from "@/src/styles/settingPage";
 import AsyncStorage from "@react-native-async-storage/async-storage";

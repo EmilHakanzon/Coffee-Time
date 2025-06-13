@@ -22,7 +22,7 @@ export function useCoffeeTypes() {
         const hotData = await hotRes.json();
         const icedData = await icedRes.json();
 
-        const filterIds = [17, 18, 19, 20, 28, 26, 25];
+        const filterIds = [9,13,17, 18, 19, 20, 28, 26, 25 ,300];
         const filteredHot = hotData.filter(
           (item: CoffeeType) => !filterIds.includes(Number(item.id)),
         );

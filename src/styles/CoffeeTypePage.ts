@@ -1,0 +1,141 @@
+import { StyleSheet } from "react-native";
+
+export const styles = StyleSheet.create({
+  container: { flex: 1, backgroundColor: "#fff", padding: 16 },
+  header: {
+    fontSize: 28,
+    fontWeight: "bold",
+    color: "#8B4513",
+    marginBottom: 16,
+    textAlign: "center",
+    letterSpacing: 1,
+  },
+  introText: {
+    color: "#6e4b2a",
+    fontSize: 16,
+    textAlign: "center",
+    marginBottom: 18,
+    fontStyle: "italic",
+    lineHeight: 22,
+  },
+  filterRow: {
+    flexDirection: "row",
+    marginBottom: 16,
+    justifyContent: "center",
+  },
+  filterButton: {
+    flex: 1,
+    padding: 10,
+    backgroundColor: "#eee",
+    borderRadius: 8,
+    marginHorizontal: 4,
+  },
+  filterButtonActive: {
+    backgroundColor: "#8B4513",
+  },
+  filterButtonText: {
+    color: "#8B4513",
+    textAlign: "center",
+    fontWeight: "bold",
+    fontSize: 16,
+  },
+  filterButtonTextActive: {
+    color: "#fff",
+  },
+  coffeeItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#f8f4f0",
+    borderRadius: 10,
+    padding: 12,
+    marginBottom: 10,
+    elevation: 2,
+    shadowColor: "#8B4513",
+    shadowOpacity: 0.08,
+    shadowRadius: 6,
+    shadowOffset: { width: 0, height: 2 },
+  },
+  coffeeImage: {
+    width: 48,
+    height: 48,
+    borderRadius: 8,
+    marginRight: 14,
+    backgroundColor: "#eee",
+  },
+  coffeeEmoji: {
+    fontSize: 32,
+    marginRight: 14,
+  },
+  coffeeTitle: {
+    fontWeight: "bold",
+    fontSize: 18,
+    color: "#8B4513",
+  },
+  errorText: {
+    color: "#8B4513",
+    textAlign: "center",
+    marginTop: 40,
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.3)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalContent: {
+    backgroundColor: "#fff",
+    borderRadius: 16,
+    padding: 24,
+    width: "85%",
+    alignItems: "center",
+    elevation: 5,
+    shadowColor: "#8B4513",
+    shadowOpacity: 0.15,
+    shadowRadius: 10,
+    shadowOffset: { width: 0, height: 4 },
+  },
+  modalImage: {
+    width: 80,
+    height: 80,
+    borderRadius: 12,
+    marginBottom: 16,
+    backgroundColor: "#eee",
+  },
+  modalEmoji: {
+    fontSize: 48,
+    marginBottom: 16,
+  },
+  modalTitle: {
+    fontWeight: "bold",
+    fontSize: 22,
+    color: "#8B4513",
+    marginBottom: 8,
+    textAlign: "center",
+  },
+  modalDescription: {
+    color: "#555",
+    marginBottom: 12,
+    textAlign: "center",
+    fontSize: 15,
+  },
+  modalIngredients: {
+    color: "#8B4513",
+    marginBottom: 10,
+    textAlign: "center",
+    fontSize: 15,
+  },
+  closeButton: {
+    marginTop: 12,
+    backgroundColor: "#8B4513",
+    borderRadius: 8,
+    paddingVertical: 8,
+    paddingHorizontal: 24,
+  },
+  closeButtonText: {
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 16,
+  },
+});
+
+export default styles

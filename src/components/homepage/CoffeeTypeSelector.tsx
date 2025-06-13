@@ -28,14 +28,19 @@ export default function CoffeeTypeSelector({
 
   return (
     <View>
-      <Picker
-        selectedValue={category}
-        onValueChange={(value) => setCategory(value)}
-        style={{ marginBottom: 12 }}
-      >
-        <Picker.Item label="Hot Coffee" value="hot" />
-        <Picker.Item label="Iced Coffee" value="ice" />
-      </Picker>
+      <View style={{ borderRadius: 8, overflow: "hidden", marginBottom: 12 }}>
+        <Picker
+          selectedValue={category}
+          onValueChange={(value) => setCategory(value)}
+          style={{
+            backgroundColor: "#B08968",
+            color: "#fff",
+          }}
+        >
+          <Picker.Item label="Hot Coffee" value="hot" />
+          <Picker.Item label="Iced Coffee" value="ice" />
+        </Picker>
+      </View>
       {loading ? (
         <ActivityIndicator
           size="large"

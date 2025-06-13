@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   selectorContainer: {
-    marginBottom: 24,
+    marginBottom: 18,
   },
   selectorLabel: {
     fontSize: 16,

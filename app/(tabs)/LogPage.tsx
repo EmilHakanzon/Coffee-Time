@@ -1,6 +1,6 @@
-import DayCard from "@/src/components/DayCard";
-import DayDetails from "@/src/components/DayDetails";
-import PeriodSelector from "@/src/components/PeriodSelector";
+import DayCard from "@/src/components/log/DayCard";
+import DayDetails from "@/src/components/log/DayDetails";
+import PeriodSelector from "@/src/components/log/PeriodSelector";
 import styles from "@/src/styles/LogPage";
 import { CoffeeLog } from "@/src/types/coffee";
 import { filterLogsByPeriod, groupLogsByDay } from "@/src/utils/logpageUtlis";

@@ -1,10 +1,9 @@
-import CoffeeTypeSelector from "@/src/components/CoffeeTypeSelector";
-import { CoffeeType, type CoffeeLog } from "@/src/types/coffee";
+import CoffeeTypeSelector from "@/src/components/homepage/CoffeeTypeSelector";
+import DrinkCoffeeButton from "@/src/components/homepage/DrinkCoffeeButton";
+import { useCoffeeHome } from "@/src/hooks/useCoffeeHome";
 import { Ionicons } from "@expo/vector-icons";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useFocusEffect } from "@react-navigation/native";
-import React, { useEffect, useState } from "react";
-import { Alert, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import React from "react";
+import { ScrollView, Text, View } from "react-native";
 import styles from "../../src/styles/HomeScreen.styles";
 import {
   formDate,
@@ -12,74 +11,21 @@ import {
   getGreeting,
   isReminderTime,
 } from "../../src/utils/homeUtils";
+
 export default function HomeScreen() {
-  const [selectedCoffeeType, setSelectedCoffeeType] =
-    useState<CoffeeType | null>(null);
-  const [lastCoffeeTime, setLastCoffeeTime] = useState<Date | null>(null);
-  const [nextReminderTime, setNextReminderTime] = useState<Date | null>(null);
-  const [coffeeLog, setCoffeeLog] = useState<CoffeeLog[]>([]);
-  const [reminderHours, setReminderHours] = useState(4);
-  const [userName, setUserName] = useState("");
-
-  // denna hook körs varje gång homepage blir aktiv och då
-  //hämtar den om på nytt.
-  useFocusEffect(
-    React.useCallback(() => {
-      (async () => {
-        const savedReminder = await AsyncStorage.getItem("reminder_hours");
-        const saveName = await AsyncStorage.getItem("profile_name");
-        const saveLog = await AsyncStorage.getItem("coffee_log");
-        if (saveName) setUserName(saveName);
-        if (savedReminder) setReminderHours(Number(savedReminder));
-        if (saveLog) {
-          const parsedLog = JSON.parse(saveLog);
-          setCoffeeLog(parsedLog);
-          // senaste kaffe tiden om man har loggats
-          if (parsedLog.length > 0) {
-            setLastCoffeeTime(new Date(parsedLog[0].timestamp));
-          } else {
-            setLastCoffeeTime(null);
-          }
-        } else {
-          setCoffeeLog([]);
-          setLastCoffeeTime(null);
-        }
-      })();
-    }, []),
-  );
-
-  // reminder calculate
-  useEffect(() => {
-    if (lastCoffeeTime) {
-      const nextTime = new Date(
-        lastCoffeeTime.getTime() + reminderHours * 60 * 60 * 1000,
-      );
-      setNextReminderTime(nextTime);
-    }
-  }, [lastCoffeeTime, reminderHours]);
-
-  const handleDrinkCoffee = async () => {
-    if (!selectedCoffeeType) {
-      Alert.alert("Please select a coffee type before logging!");
-      return;
-    }
-    const now = new Date();
-    const newLog: CoffeeLog = {
-      id: Date.now().toString(),
-      coffeeType: selectedCoffeeType,
-      timestamp: now,
-    };
-    // Uppdetera loggen i AyncStorage, hämtar den gamla coffeeLog
-    const updatedLog = [newLog, ...coffeeLog];
-    setCoffeeLog(updatedLog);
-    setLastCoffeeTime(now);
-    await AsyncStorage.setItem("coffee_log", JSON.stringify(updatedLog));
-
-    Alert.alert(
-      "Coffe Logged! ☕",
-      `Enjoyed your ${selectedCoffeeType.title}! Next reminder in ${reminderHours} hour`,
-    );
-  };
+  const {
+    selectedCoffeeType,
+    setSelectedCoffeeType,
+    lastCoffeeTime,
+    setLastCoffeeTime,
+    nextReminderTime,
+    coffeeLog,
+    setCoffeeLog,
+    reminderHours,
+    setReminderHours,
+    userName,
+    //setUserName,
+  } = useCoffeeHome();
 
   return (
     <ScrollView style={styles.container}>
@@ -111,7 +57,7 @@ export default function HomeScreen() {
             {nextReminderTime ? formtTime(nextReminderTime) : "--:--"}
           </Text>
         </View>
-        {/* Last Coffe */}
+        {/* Last Coffee */}
         {lastCoffeeTime && (
           <View style={styles.LastCoffeCard}>
             <Text style={styles.lastCoffeeLabel}>Last Coffee</Text>
@@ -133,19 +79,16 @@ export default function HomeScreen() {
           />
         </View>
 
-        {/* Drink BUtton */}
-        <TouchableOpacity
-          style={styles.drinkButton}
-          onPress={handleDrinkCoffee}
-        >
-          <Ionicons name="cafe" size={24} color="#FFFFFF" />
-          <Text style={styles.drinkButtonText}>
-            I Just Had{" "}
-            {selectedCoffeeType ? selectedCoffeeType.title : "a coffee"}
-          </Text>
-        </TouchableOpacity>
+        {/* Drink Button */}
+        <DrinkCoffeeButton
+          selectedCoffeeType={selectedCoffeeType}
+          coffeeLog={coffeeLog}
+          setCoffeeLog={setCoffeeLog}
+          setLastCoffeeTime={setLastCoffeeTime}
+          reminderHours={reminderHours}
+        />
 
-        {/* Recent Coffe Summary */}
+        {/* Recent Coffee Summary */}
         {coffeeLog.length > 0 && (
           <View style={styles.summaryCard}>
             <Text style={styles.summaryTitle}>Today's Coffee</Text>

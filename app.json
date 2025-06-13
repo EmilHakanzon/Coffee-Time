@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Coffe",
-    "slug": "Coffe",
+    "slug": "coffee-time",
     "version": "1.0.0",
     "orientation": "portrait",
     "scheme": "coffe",
@@ -14,7 +14,8 @@
       "adaptiveIcon": {
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.emilhakanzon.coffeetime"
     },
     "web": {
       "bundler": "metro",
@@ -34,6 +35,13 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "2e077aa7-bd35-4025-aa49-c94d478cd5d2"
+      }
+    },
+    "owner": "emil-hakanzon"
   }
 }

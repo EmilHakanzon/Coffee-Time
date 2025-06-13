@@ -21,9 +21,7 @@
       "bundler": "metro",
       "output": "static"
     },
-    "plugins": [
-      "expo-router"
-    ],
+    "plugins": ["expo-router"],
     "experiments": {
       "typedRoutes": true
     },
@@ -33,6 +31,7 @@
         "projectId": "2e077aa7-bd35-4025-aa49-c94d478cd5d2"
       }
     },
-    "owner": "emil-hakanzon"
+    "owner": "emil-hakanzon",
+    "icon": "./src/assets/coffeImg.png"
   }
 }

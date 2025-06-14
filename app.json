@@ -7,7 +7,7 @@
     "scheme": "coffe",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
-    "icon": "./assets/caffeeicon.png",
+    "icon": "./assets/coffeebild.png",
     "ios": {
       "supportsTablet": true
     },
@@ -28,7 +28,7 @@
         "expo-splash-screen",
         {
           "backgroundColor": "#232323",
-          "image": "./assets/coffee3.png",
+          "image": "./assets/coffeebild.png",
           "dark": {
             "image": "./assets/coffee3.png",
             "backgroundColor": "#000000"

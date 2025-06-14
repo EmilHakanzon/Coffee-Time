@@ -30,7 +30,7 @@
           "backgroundColor": "#232323",
           "image": "./assets/coffeebild.png",
           "dark": {
-            "image": "./assets/coffee3.png",
+            "icon": "./assets/coffeebild.png",
             "backgroundColor": "#000000"
           },
           "imageWidth": 200

@@ -17,7 +17,7 @@ export default function IndexScreen() {
   return (
     <View style={{ flex: 1, paddingTop: insets.top }}>
       <ImageBackground
-        source={require("../../src/assets/coffeImg.png")}
+        source={require("../../assets/coffeImg.png")}
         style={styles.background}
         resizeMode="cover"
       >
@@ -40,5 +40,3 @@ export default function IndexScreen() {
     </View>
   );
 }
-
-

@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Coffe",
+    "name": "Coffee time",
     "slug": "coffee-time",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -32,6 +32,5 @@
       }
     },
     "owner": "emil-hakanzon",
-    "icon": "./src/assets/coffeImg.png"
   }
 }

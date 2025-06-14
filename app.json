@@ -7,6 +7,7 @@
     "scheme": "coffe",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+    "icon": "./assets/caffeeicon.png",
     "ios": {
       "supportsTablet": true
     },
@@ -45,7 +46,6 @@
         "projectId": "2e077aa7-bd35-4025-aa49-c94d478cd5d2"
       }
     },
-    "owner": "emil-hakanzon",
-    "icon": "./assets/caffeeicon.png"
+    "owner": "emil-hakanzon"
   }
 }

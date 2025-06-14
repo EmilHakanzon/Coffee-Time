@@ -21,7 +21,21 @@
       "bundler": "metro",
       "output": "static"
     },
-    "plugins": ["expo-router"],
+    "plugins": [
+      "expo-router",
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#232323",
+          "image": "./assets/coffee3.png",
+          "dark": {
+            "image": "./assets/coffee3.png",
+            "backgroundColor": "#000000"
+          },
+          "imageWidth": 200
+        }
+      ]
+    ],
     "experiments": {
       "typedRoutes": true
     },
@@ -32,5 +46,6 @@
       }
     },
     "owner": "emil-hakanzon",
+    "icon": "./assets/caffeeicon.png"
   }
 }

@@ -1,50 +1,112 @@
-# Welcome to your Expo app 👋
+# ☕️ Coffee Time
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Welcome to **Coffee Time** – your personal coffee companion!  
+Track your coffee breaks, explore new brews, and get friendly reminders for your next cup.  
+Built with Expo, TypeScript, and a beautiful coffee-inspired design.
 
-## Get started
+---
 
-1. Install dependencies
+## ✨ Features
 
-   ```bash
+- 📋 **Coffee Log:**  
+  Easily log every cup you drink, with type and time.
+
+- ⏰ **Custom Reminders:**  
+  Set how often you want to be reminded to enjoy your next coffee.
+
+- 🧊 **Hot & Iced Coffee Explorer:**  
+  Browse and learn about a variety of hot and iced coffee types.
+
+- 👤 **Profile & Settings:**  
+  Personalize your name and reminder interval.
+
+- 🎨 **Beautiful UI:**  
+  Warm, inviting colors and icons for a cozy coffee experience.
+
+---
+
+🌟 Coming Soon
+
+    🔔 Push Notifications
+    Get notified on your device when it’s time for your next coffee break.
+
+---
+
+## 🚀 Getting Started
+
+1. **Clone the repository**
+   ```sh
+   git clone https://github.com/yourusername/coffee-time.git
+   cd coffee-time
+   ```
+
+2. **Install dependencies**
+   ```sh
    npm install
    ```
 
-2. Start the app
-
-   ```bash
+3. **Start the app**
+   ```sh
    npx expo start
    ```
 
-In the output, you'll find options to open the app in a
+4. **Run on your device**
+   - Scan the QR code with Expo Go (iOS/Android)
+   - Or run on an emulator
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+---
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## 🛠️ Build
 
-## Get a fresh project
+To build for production (Android/iOS):
 
-When you're ready, run:
-
-```bash
-npm run reset-project
+```sh
+npx eas build -p android
+npx eas build -p ios
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+---
 
-## Learn more
+## 🗂️ Project Structure
 
-To learn more about developing your project with Expo, look at the following resources:
+```
+/assets         # App icons, splash, and images
+/app            # App screens and navigation
+/src
+  /components   # Reusable UI components
+  /hooks        # Custom React hooks
+  /styles       # Style files
+  /types        # TypeScript types
+  /utils        # Utility functions
+```
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+---
 
-## Join the community
+## ⚙️ Customization
 
-Join our community of developers creating universal apps.
+- 🖼️ **App Icon & Splash:**  
+  Replace images in `/assets` and update `app.json` accordingly.
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+- ☕️ **Coffee Types:**  
+  Add or edit coffee types in `/src/utils/translteTOEnglish.ts`.
+
+---
+
+## 🙏 Credits
+
+- [React Native](https://reactnative.dev/)
+- [Expo](https://expo.dev/)
+- [@react-native-picker/picker](https://github.com/react-native-picker/picker)
+- [@react-native-async-storage/async-storage](https://github.com/react-native-async-storage/async-storage)
+- Icons by [Ionicons](https://ionic.io/ionicons)
+
+---
+
+## 📄 License
+
+MIT
+
+---
+
+Enjoy your coffee breaks!  
+**Coffee Time Team** ☕️✨

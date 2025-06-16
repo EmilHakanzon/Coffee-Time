@@ -1,0 +1,28 @@
+Privacy Policy for Coffee Time
+
+Last updated: 2025-06-15
+
+Your privacy is important to us. Coffee Time respects and protects the privacy of its users. This privacy policy explains what data we collect, how we use it, and your rights.
+1. Information Collection
+
+Coffee Time does not collect personally identifiable information such as your name, email address, or contact details.
+
+However, the app:
+
+    Stores user preferences and app data locally on your device using AsyncStorage. This data stays on your device and is not shared with us.
+
+    Fetches coffee-related information (e.g. coffee types, details, recommendations) from an external API. No personal information is sent to this API.
+
+2. Information Sharing
+
+We do not share your personal data with any third parties. All local data (saved via AsyncStorage) stays on your device.
+3. Information Storage
+
+We do not store any personal data on our servers. All data you save (e.g. preferences, notes) is stored locally on your device.
+4. Changes to This Policy
+
+We may update this privacy policy as needed. Any changes will be posted here and will take effect immediately upon publication.
+5. Contact
+
+If you have any questions about this privacy policy, please contact us at:
+Email: [your email address]

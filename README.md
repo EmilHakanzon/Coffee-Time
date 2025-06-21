@@ -30,6 +30,9 @@ Built with Expo, TypeScript, and a beautiful coffee-inspired design.
     🔔 Push Notifications
     Get notified on your device when it’s time for your next coffee break.
 
+📍 Deploy to Google play store(out for test)
+📍 Deploy to App store
+
 ---
 
 ## 🚀 Getting Started

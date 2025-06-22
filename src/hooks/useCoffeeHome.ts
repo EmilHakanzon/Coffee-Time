@@ -2,6 +2,8 @@ import { useFocusEffect } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useCallback, useEffect, useState } from "react";
 import type { CoffeeType, CoffeeLog } from "@/src/types/coffee";
+import { registerForPushNotificationsAsync, scheduleCoffeeNotification } from "@/src/utils/notifications";
+
 
 export function useCoffeeHome() {
   const [selectedCoffeeType, setSelectedCoffeeType] =
@@ -47,8 +49,27 @@ export function useCoffeeHome() {
         lastCoffeeTime.getTime() + reminderHours * 60 * 60 * 1000,
       );
       setNextReminderTime(nextTime);
+      scheduleCoffeeNotification(nextTime);
     }
   }, [lastCoffeeTime, reminderHours]);
+
+  useEffect(() => {
+    registerForPushNotificationsAsync().then((token) => {
+      if (token) {
+        console.log("Expo Push Token:", token);
+      }
+    });
+  }, []);
+
+  useEffect(() => {
+    AsyncStorage.setItem("reminder_hours", reminderHours.toString());
+  }, [reminderHours]);
+
+  useEffect(() => {
+    AsyncStorage.setItem("coffee_log", JSON.stringify(coffeeLog));
+  }, [coffeeLog]);
+  
+  
 
   return {
     selectedCoffeeType,

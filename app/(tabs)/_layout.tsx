@@ -1,11 +1,11 @@
 import { Ionicons } from "@expo/vector-icons";
-import { router, Tabs } from "expo-router";
-import { TouchableOpacity } from "react-native";
+import { Tabs, useRouter } from "expo-router";
+import { Pressable } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-
 
 export default function TabLayout() {
   const insets = useSafeAreaInsets();
+  const router = useRouter();
 
   return (
     <Tabs
@@ -23,36 +23,27 @@ export default function TabLayout() {
           borderTopLeftRadius: 20,
           borderTopRightRadius: 20,
           paddingBottom: 10 + insets.bottom,
+          paddingTop: 10,
           shadowOpacity: 0.1,
           shadowOffset: { width: 0, height: -2 },
         },
       }}
     >
       <Tabs.Screen
-        name="index"
-        options={{
-          title: "Start",
-          headerTitle: "",
-          tabBarStyle: { display: "none" },
-          headerTransparent: true, // <-- transparent header for index file.
-          headerStyle: { backgroundColor: "transparent" },
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="alarm-outline" size={size} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
         name="HomePage"
         options={{
           title: "Home",
-          headerTitle: "Home",
+          headerTitle: "",
+          headerRight: () => (
+            <Pressable
+              onPress={() => router.push("/SettingPage")}
+              style={{ marginRight: 20 }}
+            >
+              <Ionicons name="settings-outline" size={24} color="#8B4513" />
+            </Pressable>
+          ),
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="home-outline" size={size} color={color} />
-          ),
-          headerLeft: () => (
-            <TouchableOpacity onPress={() => router.back()}>
-              <Ionicons name="arrow-back" size={35} color="#222" />
-            </TouchableOpacity>
           ),
         }}
       />
@@ -61,45 +52,46 @@ export default function TabLayout() {
         name="LogPage"
         options={{
           title: "Logs",
-          headerTitle: "Logs",
+          headerTitle: "",
+          headerRight: () => (
+            <Pressable
+              onPress={() => router.push("/SettingPage")}
+              style={{ marginRight: 20 }}
+            >
+              <Ionicons name="settings-outline" size={24} color="#8B4513" />
+            </Pressable>
+          ),
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="newspaper-outline" size={size} color={color} />
           ),
-          headerLeft: () => (
-            <TouchableOpacity onPress={() => router.replace("/HomePage")}>
-              <Ionicons name="arrow-back" size={35} color="#222" />
-            </TouchableOpacity>
-          ),
         }}
       />
+
       <Tabs.Screen
         name="CoffeTypePage"
         options={{
           title: "Coffee Types",
-          headerTitle: "Coffee Types",
+          headerTitle: "",
+          headerRight: () => (
+            <Pressable
+              onPress={() => router.push("/SettingPage")}
+              style={{ marginRight: 20 }}
+            >
+              <Ionicons name="settings-outline" size={24} color="#8B4513" />
+            </Pressable>
+          ),
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="cafe-outline" size={size} color={color} />
           ),
-          headerLeft: () => (
-            <TouchableOpacity onPress={() => router.replace("/HomePage")}>
-              <Ionicons name="arrow-back" size={35} color="#222" />
-            </TouchableOpacity>
-          ),
         }}
       />
+
       <Tabs.Screen
         name="SettingPage"
         options={{
           title: "Setting",
-          headerTitle: "Setting",
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="settings-outline" size={size} color={color} />
-          ),
-          headerLeft: () => (
-            <TouchableOpacity onPress={() => router.replace("/HomePage")}>
-              <Ionicons name="arrow-back" size={35} color="#222" />
-            </TouchableOpacity>
-          ),
+          headerTitle: "",
+          tabBarButton: () => null, // <-- Döljer Setting från tabbarna
         }}
       />
     </Tabs>

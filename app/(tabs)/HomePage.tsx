@@ -104,6 +104,8 @@ export default function HomeScreen() {
             </Text>
           </View>
         )}
+        {/* <Button title="Testa push" onPress={testPushNotification} />
+        <Button title="testa notis" onPress={() => scheduleCoffeeNotification(new Date())} /> */}
       </View>
     </ScrollView>
   );

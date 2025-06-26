@@ -1,9 +1,7 @@
 import styles from "@/src/styles/startscreen";
-import { testPushNotification } from "@/src/utils/notifications";
 import { useRouter } from "expo-router";
 import React from "react";
 import {
-  Button,
   ImageBackground,
   ScrollView,
   Text,
@@ -36,7 +34,6 @@ export default function IndexScreen() {
             >
               <Text style={styles.buttonText}>Go to HomePage</Text>
             </TouchableOpacity>
-            <Button title="Testa push" onPress={testPushNotification} />
           </View>
         </ScrollView>
       </ImageBackground>

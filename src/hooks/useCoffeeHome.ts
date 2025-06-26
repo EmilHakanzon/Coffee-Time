@@ -1,9 +1,11 @@
-import { useFocusEffect } from "@react-navigation/native";
+import type { CoffeeLog, CoffeeType } from "@/src/types/coffee";
+import {
+  registerForPushNotificationsAsync,
+  scheduleCoffeeNotification,
+} from "@/src/utils/notifications";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useCallback, useEffect, useState } from "react";
-import type { CoffeeType, CoffeeLog } from "@/src/types/coffee";
-import { registerForPushNotificationsAsync, scheduleCoffeeNotification } from "@/src/utils/notifications";
-
+import { useFocusEffect } from "@react-navigation/native";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 export function useCoffeeHome() {
   const [selectedCoffeeType, setSelectedCoffeeType] =
@@ -42,13 +44,24 @@ export function useCoffeeHome() {
     }, []),
   );
 
+  const scheduledTimeRef = useRef<number | null>(null);
+
   //  Uppdaterar nästa påminnelse-tid varje gång senaste kaffe-tiden eller påminnelse-timmar ändras.
   useEffect(() => {
     if (lastCoffeeTime) {
       const nextTime = new Date(
         lastCoffeeTime.getTime() + reminderHours * 60 * 60 * 1000,
       );
+
+      console.log(
+        "Schemalägger (eller omschemalägger) notis till:",
+        nextTime.toLocaleString(),
+      );
+
       setNextReminderTime(nextTime);
+      scheduledTimeRef.current = nextTime.getTime();
+
+      // Avbryt alla tidigare notiser och lägg en ny
       scheduleCoffeeNotification(nextTime);
     }
   }, [lastCoffeeTime, reminderHours]);
@@ -68,8 +81,6 @@ export function useCoffeeHome() {
   useEffect(() => {
     AsyncStorage.setItem("coffee_log", JSON.stringify(coffeeLog));
   }, [coffeeLog]);
-  
-  
 
   return {
     selectedCoffeeType,

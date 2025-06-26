@@ -14,7 +14,6 @@ export default function ReminderSlider({
   // Sätter värdet och sparar till AsyncStorage
   const handleSliderChange = async (value: number) => {
     setReminderHours(value);
-    await AsyncStorage.setItem("reminder_hours", value.toString());
   };
 
   return (

@@ -85,15 +85,6 @@ export default function TabLayout() {
           ),
         }}
       />
-
-      <Tabs.Screen
-        name="SettingPage"
-        options={{
-          title: "Setting",
-          headerTitle: "",
-          tabBarButton: () => null, // <-- Döljer Setting från tabbarna
-        }}
-      />
     </Tabs>
   );
 }

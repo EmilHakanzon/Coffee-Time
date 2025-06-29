@@ -1,4 +1,5 @@
 import { useProfileStore } from "@/src/store/profilestore";
+import format from "date-fns/format";
 import React from "react";
 import { ScrollView, Text, View } from "react-native";
 
@@ -11,7 +12,7 @@ function getStreak(waterLog: number[], glassSize: number, dailyGoal: number) {
   });
   // Sortera datum
   const days = Object.keys(map).sort(
-    (a, b) => new Date(a).getTime() - new Date(b).getTime()
+    (a, b) => new Date(a).getTime() - new Date(b).getTime(),
   );
   // Räkna streak
   let streak = 0;
@@ -48,36 +49,114 @@ export default function WaterStatsPage() {
     map[d] = (map[d] || 0) + 1;
   });
   const days = Object.keys(map).sort(
-    (a, b) => new Date(b).getTime() - new Date(a).getTime()
+    (a, b) => new Date(b).getTime() - new Date(a).getTime(),
   );
   const { streak, maxStreak } = getStreak(waterLog, glassSize, dailyGoal);
 
   return (
-    <ScrollView style={{ flex: 1, backgroundColor: "#F5F5DC" }}>
-      <View style={{ alignItems: "center", marginTop: 32 }}>
-        <Text style={{ fontSize: 26, fontWeight: "bold", color: "#0077cc" }}>
-          Water Stats 💧
+    <ScrollView style={{ flex: 1, backgroundColor: "#F8F8F8" }}>
+      <View style={{ alignItems: "center", marginTop: 32, marginBottom: 16 }}>
+        <Text
+          style={{
+            fontSize: 28,
+            fontWeight: "bold",
+            color: "#0077cc",
+            marginBottom: 20,
+          }}
+        >
+          💧 Water Stats
         </Text>
-        <Text style={{ marginTop: 12, fontSize: 18 }}>
-          Current streak: <Text style={{ fontWeight: "bold" }}>{streak}</Text> days
-        </Text>
-        <Text style={{ fontSize: 16, color: "#888" }}>
-          Longest streak: {maxStreak} days
-        </Text>
+        <View
+          style={{
+            backgroundColor: "#fff",
+            borderRadius: 16,
+            padding: 20,
+            width: "85%",
+            alignItems: "center",
+            shadowColor: "#000",
+            shadowOpacity: 0.07,
+            shadowRadius: 8,
+            elevation: 2,
+            marginBottom: 18,
+          }}
+        >
+          <Text style={{ fontSize: 20, fontWeight: "bold", color: "#0077cc" }}>
+            Current streak
+          </Text>
+          <Text
+            style={{
+              fontSize: 32,
+              fontWeight: "bold",
+              color: streak > 0 ? "#4caf50" : "#8B4513",
+              marginVertical: 4,
+            }}
+          >
+            {streak} days
+          </Text>
+          <Text style={{ fontSize: 16, color: "#888" }}>
+            Longest streak:{" "}
+            <Text style={{ fontWeight: "bold" }}>{maxStreak}</Text> days
+          </Text>
+        </View>
       </View>
-      <View style={{ margin: 24 }}>
-        <Text style={{ fontWeight: "bold", fontSize: 18, marginBottom: 8 }}>
+      <View style={{ marginHorizontal: 24, marginBottom: 32 }}>
+        <Text
+          style={{
+            fontWeight: "bold",
+            fontSize: 20,
+            marginBottom: 12,
+            color: "#0077cc",
+          }}
+        >
           Water intake per day
         </Text>
-        {days.length === 0 && <Text>No water logged yet!</Text>}
-        {days.map((d) => (
-          <View key={d} style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 4 }}>
-            <Text>{d}</Text>
-            <Text>
-              {map[d] * glassSize / 1000} L ({map[d]} glasses)
-            </Text>
-          </View>
-        ))}
+        {days.length === 0 && (
+          <Text style={{ color: "#8B4513" }}>No water logged yet!</Text>
+        )}
+        {days.map((d) => {
+          // Format date as 'dd MMM yyyy'
+          const dateObj = new Date(d);
+          const formattedDate = format(dateObj, "dd MMM yyyy");
+          const liters = ((map[d] * glassSize) / 1000).toFixed(1); // One decimal
+          const metGoal = parseFloat(liters) >= dailyGoal / 1000;
+          return (
+            <View
+              key={d}
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
+                backgroundColor: metGoal ? "#e3fcec" : "#fff",
+                borderRadius: 10,
+                paddingVertical: 10,
+                paddingHorizontal: 16,
+                marginBottom: 10,
+                borderWidth: 1,
+                borderColor: metGoal ? "#4caf50" : "#eee",
+                shadowColor: "#000",
+                shadowOpacity: 0.08,
+                shadowRadius: 4,
+                elevation: 2,
+              }}
+            >
+              <Text style={{ color: "#8B4513", fontWeight: "bold" }}>
+                💧 {formattedDate}
+              </Text>
+              <Text
+                style={{
+                  color: metGoal ? "#4caf50" : "#0077cc",
+                  fontWeight: "bold",
+                }}
+              >
+                {liters} L{" "}
+                <Text style={{ color: "#888", fontWeight: "normal" }}>
+                  ({map[d]} glasses)
+                </Text>
+                {metGoal ? "  ✔️" : ""}
+              </Text>
+            </View>
+          );
+        })}
       </View>
     </ScrollView>
   );

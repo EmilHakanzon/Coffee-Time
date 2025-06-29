@@ -12,7 +12,7 @@ import { Picker } from "@react-native-picker/picker";
 import * as Notifications from "expo-notifications";
 import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { Alert, Text, TouchableOpacity, View } from "react-native";
+import { Alert, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function SettingPage() {
@@ -88,115 +88,117 @@ export default function SettingPage() {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#F5F5DC" }}>
-      {/* Header */}
-      <View
-        style={{
-          paddingTop: 30,
-          paddingBottom: 20,
-          backgroundColor: "#F5F5DC",
-          alignItems: "center",
-          borderBottomWidth: 1,
-          borderBottomColor: "#E0E0E0",
-          marginBottom: 10,
-        }}
-      >
-        <Text
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#F8F8F8" }}>
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+        {/* Header */}
+        <View
           style={{
-            fontSize: 26,
-            fontWeight: "bold",
-            color: "#8B4513",
-            letterSpacing: 1,
+            paddingTop: 30,
+            paddingBottom: 20,
+            backgroundColor: "#F8F8F8",
+            alignItems: "center",
+            borderBottomWidth: 1,
+            borderBottomColor: "#E0E0E0",
+            marginBottom: 10,
           }}
         >
-          Settings
-        </Text>
-        <Text style={{ color: "#8B4513", fontSize: 14, marginTop: 4 }}>
-          Manage your profile and notifications
-        </Text>
-      </View>
-
-      {/* Floating Card */}
-      <View
-        style={{
-          backgroundColor: "#fff",
-          marginHorizontal: 20,
-          borderRadius: 18,
-          padding: 22,
-          shadowColor: "#000",
-          shadowOpacity: 0.08,
-          shadowRadius: 10,
-          elevation: 4,
-          marginTop: 10,
-          marginBottom: 20,
-        }}
-      >
-        <ProfileInput value={name} onChangeText={setName} />
-
-        <Text style={styles.label}>Country</Text>
-        <CountrySelector
-          country={country}
-          setCountry={setCountry}
-          showPicker={showCountryPicker}
-          setShowPicker={setShowCountryPicker}
-        />
-
-        <Text style={styles.label}>Favorite coffee</Text>
-        {loading ? (
-          <Text style={{ color: "#8B4513" }}>Loading coffee...</Text>
-        ) : (
-          <Picker
-            selectedValue={favorite}
-            onValueChange={setFavorite}
-            style={styles.input}
+          <Text
+            style={{
+              fontSize: 26,
+              fontWeight: "bold",
+              color: "#8B4513",
+              letterSpacing: 1,
+            }}
           >
-            <Picker.Item label="Select coffee type..." value="" />
-            {allCoffees.map((coffee) => (
-              <Picker.Item
-                key={coffee.id}
-                label={coffee.title}
-                value={coffee.title}
-              />
-            ))}
-          </Picker>
-        )}
+            Settings
+          </Text>
+          <Text style={{ color: "#8B4513", fontSize: 14, marginTop: 4 }}>
+            Manage your profile and notifications
+          </Text>
+        </View>
 
-        <ReminderSlider
-          reminderHours={reminderHours}
-          setReminderHours={setReminderHours}
-        />
-
-        {/* Glass Size Slider */}
-        <Text style={styles.label}>Water Glass Size: {glassSize} ml</Text>
-        <Slider
-          style={{ width: "100%", height: 40 }}
-          minimumValue={100}
-          maximumValue={500}
-          step={10}
-          value={glassSize}
-          onValueChange={setGlassSize}
-          minimumTrackTintColor="#0077cc"
-          maximumTrackTintColor="#ccc"
-          thumbTintColor="#0077cc"
-        />
-
-        {/* Push Notifications Toggle */}
-        <PushNotificationToggle
-          notificationsEnabled={notificationsEnabled}
-          setNotificationsEnabled={setNotificationsEnabled}
-        />
-
-        <TouchableOpacity
-          style={[styles.saveButton, { marginTop: 10 }]}
-          onPress={saveProfile}
+        {/* Floating Card */}
+        <View
+          style={{
+            backgroundColor: "#fff",
+            marginHorizontal: 20,
+            borderRadius: 18,
+            padding: 22,
+            shadowColor: "#000",
+            shadowOpacity: 0.08,
+            shadowRadius: 10,
+            elevation: 4,
+            marginTop: 10,
+            marginBottom: 20,
+          }}
         >
-          <Text style={styles.saveButtonText}>Save profile</Text>
-        </TouchableOpacity>
-        {saved && <Text style={styles.savedText}>Profile saved!</Text>}
-      </View>
+          <ProfileInput value={name} onChangeText={setName} />
 
-      {/* Home Button */}
-      <HomeButton />
+          <Text style={styles.label}>Country</Text>
+          <CountrySelector
+            country={country}
+            setCountry={setCountry}
+            showPicker={showCountryPicker}
+            setShowPicker={setShowCountryPicker}
+          />
+
+          <Text style={styles.label}>Favorite coffee</Text>
+          {loading ? (
+            <Text style={{ color: "#8B4513" }}>Loading coffee...</Text>
+          ) : (
+            <Picker
+              selectedValue={favorite}
+              onValueChange={setFavorite}
+              style={styles.input}
+            >
+              <Picker.Item label="Select coffee type..." value="" />
+              {allCoffees.map((coffee) => (
+                <Picker.Item
+                  key={coffee.id}
+                  label={coffee.title}
+                  value={coffee.title}
+                />
+              ))}
+            </Picker>
+          )}
+
+          <ReminderSlider
+            reminderHours={reminderHours}
+            setReminderHours={setReminderHours}
+          />
+
+          {/* Glass Size Slider */}
+          <Text style={styles.label}>Water Glass Size: {glassSize} ml</Text>
+          <Slider
+            style={{ width: "100%", height: 40 }}
+            minimumValue={100}
+            maximumValue={1000}
+            step={50}
+            value={glassSize}
+            onSlidingComplete={setGlassSize}
+            minimumTrackTintColor="#0077cc"
+            maximumTrackTintColor="#ccc"
+            thumbTintColor="#0077cc"
+          />
+
+          {/* Push Notifications Toggle */}
+          <PushNotificationToggle
+            notificationsEnabled={notificationsEnabled}
+            setNotificationsEnabled={setNotificationsEnabled}
+          />
+
+          <TouchableOpacity
+            style={[styles.saveButton, { marginTop: 10 }]}
+            onPress={saveProfile}
+          >
+            <Text style={styles.saveButtonText}>Save profile</Text>
+          </TouchableOpacity>
+          {saved && <Text style={styles.savedText}>Profile saved!</Text>}
+        </View>
+
+        {/* Home Button */}
+        <HomeButton />
+      </ScrollView>
     </SafeAreaView>
   );
 }

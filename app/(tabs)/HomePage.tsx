@@ -1,9 +1,10 @@
 import CoffeeTypeSelector from "@/src/components/homepage/CoffeeTypeSelector";
 import DrinkCoffeeButton from "@/src/components/homepage/DrinkCoffeeButton";
 import { useCoffeeHome } from "@/src/hooks/useCoffeeHome";
+import { useProfileStore } from "@/src/store/profilestore";
 import { Ionicons } from "@expo/vector-icons";
-import React from "react";
-import { ScrollView, Text, View } from "react-native";
+import React, { useState } from "react";
+import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import styles from "../../src/styles/HomeScreen.styles";
 import {
   formDate,
@@ -14,24 +15,51 @@ import {
 
 export default function HomeScreen() {
   const {
+    name,
+    reminderHours,
+    setReminderHours,
+    coffeeLog,
+    setCoffeeLog,
+    waterLog,
+    setWaterLog,
+    glassSize,
+  } = useProfileStore();
+  const {
     selectedCoffeeType,
     setSelectedCoffeeType,
     lastCoffeeTime,
     setLastCoffeeTime,
     nextReminderTime,
-    coffeeLog,
-    setCoffeeLog,
-    reminderHours,
-    setReminderHours,
-    userName,
-    //setUserName,
   } = useCoffeeHome();
+  const [showWaterReminder, setShowWaterReminder] = useState(false);
+
+  // Funktion som anropas när kaffe loggas
+  const handleCoffeeLogged = () => {
+    setShowWaterReminder(true);
+    setTimeout(() => setShowWaterReminder(false), 10000); // Visa i 10 sekunder
+  };
+
+  // Vattenmål per dag (ml)
+  const dailyGoal = 3000;
+  // Filtrera dagens vattenloggar
+  const today = new Date().toDateString();
+  const todaysWaterLogs = waterLog.filter(
+    (ts) => new Date(ts).toDateString() === today,
+  );
+  const waterDrank = todaysWaterLogs.length * glassSize;
+  const waterLeft = Math.max(0, dailyGoal - waterDrank);
+  const waterPercent = Math.min(1, waterDrank / dailyGoal);
+
+  // Logga ett glas vatten
+  const handleLogWater = () => {
+    setWaterLog([Date.now(), ...waterLog]);
+  };
 
   return (
     <ScrollView style={styles.container}>
       <View style={styles.greetingContainer}>
         <Text style={styles.greetingText}>{getGreeting()} 👋</Text>
-        {userName ? <Text style={styles.greetingName}>{userName}</Text> : null}
+        {name ? <Text style={styles.greetingName}>{name}</Text> : null}
       </View>
       {/* Reminder Status */}
       <View style={styles.content}>
@@ -56,6 +84,18 @@ export default function HomeScreen() {
           <Text style={styles.statuTime}>
             {nextReminderTime ? formtTime(nextReminderTime) : "--:--"}
           </Text>
+          {showWaterReminder && (
+            <Text
+              style={{
+                color: "#0077cc",
+                marginTop: 8,
+                fontWeight: "bold",
+                fontSize: 15,
+              }}
+            >
+              Remember to drink a glass of water! 💧
+            </Text>
+          )}
         </View>
         {/* Last Coffee */}
         {lastCoffeeTime && (
@@ -86,6 +126,7 @@ export default function HomeScreen() {
           setCoffeeLog={setCoffeeLog}
           setLastCoffeeTime={setLastCoffeeTime}
           reminderHours={reminderHours}
+          onCoffeeLogged={handleCoffeeLogged}
         />
 
         {/* Recent Coffee Summary */}
@@ -104,8 +145,57 @@ export default function HomeScreen() {
             </Text>
           </View>
         )}
-        {/* <Button title="Testa push" onPress={testPushNotification} />
-        <Button title="testa notis" onPress={() => scheduleCoffeeNotification(new Date())} /> */}
+
+        {/* Water Tracker */}
+        <View style={{ marginTop: 24, alignItems: "center" }}>
+          <Text style={{ fontWeight: "bold", fontSize: 18, color: "#0077cc" }}>
+            Water Intake
+          </Text>
+          <Text style={{ marginVertical: 4 }}>
+            {waterDrank / 1000} / {dailyGoal / 1000} L
+          </Text>
+          <View
+            style={{
+              width: "80%",
+              height: 12,
+              backgroundColor: "#e0e0e0",
+              borderRadius: 6,
+              marginBottom: 8,
+            }}
+          >
+            <View
+              style={{
+                width: `${waterPercent * 100}%`,
+                height: 12,
+                backgroundColor: "#0077cc",
+                borderRadius: 6,
+              }}
+            />
+          </View>
+          <TouchableOpacity
+            style={{
+              backgroundColor: "#0077cc",
+              padding: 12,
+              borderRadius: 8,
+              marginTop: 4,
+            }}
+            onPress={handleLogWater}
+          >
+            <Text
+              style={{ color: "#fff", fontWeight: "bold" }}
+            >{`Log Water (+${glassSize} ml)`}</Text>
+          </TouchableOpacity>
+          <Text
+            style={{
+              marginTop: 4,
+              color: waterLeft === 0 ? "#4caf50" : "#8B4513",
+            }}
+          >
+            {waterLeft === 0
+              ? "Goal reached!"
+              : `${waterLeft / 1000} L left today`}
+          </Text>
+        </View>
       </View>
     </ScrollView>
   );

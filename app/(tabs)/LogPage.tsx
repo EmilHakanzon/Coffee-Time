@@ -1,31 +1,20 @@
 import DayCard from "@/src/components/log/DayCard";
 import DayDetails from "@/src/components/log/DayDetails";
 import PeriodSelector from "@/src/components/log/PeriodSelector";
+import { useProfileStore } from "@/src/store/profilestore";
 import styles from "@/src/styles/LogPage";
-import { CoffeeLog } from "@/src/types/coffee";
 import { filterLogsByPeriod, groupLogsByDay } from "@/src/utils/logpageUtlis";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useFocusEffect } from "expo-router";
 import React, { useState } from "react";
 import { FlatList, Text, View } from "react-native";
 
 export default function LogPage() {
-  const [coffeeLog, setCoffeeLog] = useState<CoffeeLog[]>([]);
+  const { coffeeLog, setCoffeeLog } = useProfileStore();
   const [period, setPeriod] = useState<"day" | "week" | "month" | "year">(
     "day",
   );
   const [selectedDay, setSelectedDay] = useState<string | null>(null);
-  //  Ladda loggen från AsyncStorage när sidan blir aktiv
-  useFocusEffect(() => {
-    (async () => {
-      const saved = await AsyncStorage.getItem("coffee_log");
-      if (saved) setCoffeeLog(JSON.parse(saved));
-    })();
-  });
-
   // Filtrera loggen efter period
   const filteredLog = filterLogsByPeriod(coffeeLog, period);
-
   // Gruppad logg per dag
   // sortera dagarna i fallande ordning
   const grouped = groupLogsByDay(filteredLog);

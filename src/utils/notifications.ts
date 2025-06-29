@@ -1,15 +1,22 @@
+import { showCoffeeReminderToast } from "@/src/utils/toast";
 import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
 
 //  Android-konfiguration
 Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: true,
-    shouldSetBadge: false,
-    shouldShowBanner: true,
-    shouldShowList: true,
-  }),
+  handleNotification: async (notification) => {
+    // Visa toast om appen är foreground
+    if (notification && notification.data && notification.data._displayInApp) {
+      showCoffeeReminderToast();
+    }
+    return {
+      shouldShowAlert: true,
+      shouldPlaySound: true,
+      shouldSetBadge: false,
+      shouldShowBanner: true,
+      shouldShowList: true,
+    };
+  },
 });
 
 //  Be om tillstånd & returnera token

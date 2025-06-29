@@ -10,12 +10,14 @@ export default function DrinkCoffeeButton({
   setCoffeeLog,
   setLastCoffeeTime,
   reminderHours,
+  onCoffeeLogged,
 }: {
   selectedCoffeeType: CoffeeType | null;
   coffeeLog: CoffeeLog[];
   setCoffeeLog: (logs: CoffeeLog[]) => void;
   setLastCoffeeTime: (date: Date) => void;
   reminderHours: number;
+  onCoffeeLogged?: () => void;
 }) {
   // Körs när användaren loggar en kaffe. Lägger till ny logg, uppdaterar AsyncStorage och visar alert.
 
@@ -40,6 +42,14 @@ export default function DrinkCoffeeButton({
     Alert.alert(
       "Coffe Logged! ☕",
       `Enjoyed your ${selectedCoffeeType.title}! Next reminder in ${reminderHours} hour`,
+      [
+        {
+          text: "OK",
+          onPress: () => {
+            if (onCoffeeLogged) onCoffeeLogged();
+          },
+        },
+      ],
     );
   };
 

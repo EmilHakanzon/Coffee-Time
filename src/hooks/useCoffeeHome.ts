@@ -1,4 +1,5 @@
-import type { CoffeeLog, CoffeeType } from "@/src/types/coffee";
+import { useProfileStore } from "@/src/store/profilestore";
+import type { CoffeeType } from "@/src/types/coffee";
 import {
   registerForPushNotificationsAsync,
   scheduleCoffeeNotification,
@@ -12,23 +13,16 @@ export function useCoffeeHome() {
     useState<CoffeeType | null>(null);
   const [lastCoffeeTime, setLastCoffeeTime] = useState<Date | null>(null);
   const [nextReminderTime, setNextReminderTime] = useState<Date | null>(null);
-  const [coffeeLog, setCoffeeLog] = useState<CoffeeLog[]>([]);
-  const [reminderHours, setReminderHours] = useState(4);
-  const [userName, setUserName] = useState("");
+  const { reminderHours } = useProfileStore();
 
   // denna hook körs varje gång homepage blir aktiv och då
   //hämtar den om på nytt.
   useFocusEffect(
     useCallback(() => {
       (async () => {
-        const savedReminder = await AsyncStorage.getItem("reminder_hours");
-        const saveName = await AsyncStorage.getItem("profile_name");
         const saveLog = await AsyncStorage.getItem("coffee_log");
-        if (saveName) setUserName(saveName);
-        if (savedReminder) setReminderHours(Number(savedReminder));
         if (saveLog) {
           const parsedLog = JSON.parse(saveLog);
-          setCoffeeLog(parsedLog);
           // senaste kaffe tiden om man har loggats
 
           if (parsedLog.length > 0) {
@@ -37,7 +31,6 @@ export function useCoffeeHome() {
             setLastCoffeeTime(null);
           }
         } else {
-          setCoffeeLog([]);
           setLastCoffeeTime(null);
         }
       })();
@@ -74,24 +67,11 @@ export function useCoffeeHome() {
     });
   }, []);
 
-  useEffect(() => {
-    AsyncStorage.setItem("reminder_hours", reminderHours.toString());
-  }, [reminderHours]);
-
-  useEffect(() => {
-    AsyncStorage.setItem("coffee_log", JSON.stringify(coffeeLog));
-  }, [coffeeLog]);
-
   return {
     selectedCoffeeType,
     setSelectedCoffeeType,
     lastCoffeeTime,
     setLastCoffeeTime,
     nextReminderTime,
-    coffeeLog,
-    setCoffeeLog,
-    reminderHours,
-    setReminderHours,
-    userName,
   };
 }

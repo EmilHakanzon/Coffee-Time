@@ -85,6 +85,25 @@ export default function TabLayout() {
           ),
         }}
       />
+
+      <Tabs.Screen
+        name="WaterStatsPage"
+        options={{
+          title: "Water",
+          headerTitle: "",
+          headerRight: () => (
+            <Pressable
+              onPress={() => router.push("/SettingPage")}
+              style={{ marginRight: 20 }}
+            >
+              <Ionicons name="settings-outline" size={24} color="#8B4513" />
+            </Pressable>
+          ),
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="water-outline" size={size} color={color} />
+          ),
+        }}
+      />
     </Tabs>
   );
 }

@@ -4,8 +4,10 @@ import ProfileInput from "@/src/components/setting/ProfileInput";
 import PushNotificationToggle from "@/src/components/setting/PushNotificationToggle";
 import ReminderSlider from "@/src/components/setting/ReminderSlider";
 import { useCoffeeTypes } from "@/src/hooks/useCoffeeTypes";
+import { useProfileStore } from "@/src/store/profilestore";
 import styles from "@/src/styles/settingPage";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Slider from "@react-native-community/slider";
 import { Picker } from "@react-native-picker/picker";
 import * as Notifications from "expo-notifications";
 import { useRouter } from "expo-router";
@@ -14,14 +16,24 @@ import { Alert, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function SettingPage() {
-  const [name, setName] = useState("");
-  const [country, setCountry] = useState("SE");
-  const [favorite, setFavorite] = useState("");
-  const [showCountryPicker, setShowCountryPicker] = useState(false);
+  const {
+    name,
+    setName,
+    country,
+    setCountry,
+    favorite,
+    setFavorite,
+    reminderHours,
+    setReminderHours,
+    notificationsEnabled,
+    setNotificationsEnabled,
+    glassSize,
+    setGlassSize,
+  } = useProfileStore();
+
   const { hotCoffees, icedCoffees, loading } = useCoffeeTypes();
-  const [reminderHours, setReminderHours] = useState(4);
+  const [showCountryPicker, setShowCountryPicker] = useState(false);
   const [saved, setSaved] = useState(false);
-  const [notificationsEnabled, setNotificationsEnabled] = useState(false);
 
   const allCoffees = [...hotCoffees, ...icedCoffees];
   const router = useRouter();
@@ -152,6 +164,20 @@ export default function SettingPage() {
         <ReminderSlider
           reminderHours={reminderHours}
           setReminderHours={setReminderHours}
+        />
+
+        {/* Glass Size Slider */}
+        <Text style={styles.label}>Water Glass Size: {glassSize} ml</Text>
+        <Slider
+          style={{ width: "100%", height: 40 }}
+          minimumValue={100}
+          maximumValue={500}
+          step={10}
+          value={glassSize}
+          onValueChange={setGlassSize}
+          minimumTrackTintColor="#0077cc"
+          maximumTrackTintColor="#ccc"
+          thumbTintColor="#0077cc"
         />
 
         {/* Push Notifications Toggle */}

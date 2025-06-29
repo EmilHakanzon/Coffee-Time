@@ -1,6 +1,6 @@
 Privacy Policy for Coffee Time
 
-Last updated: 2025-06-27
+Last updated: 2025-06-29
 
 Your privacy is important to us. Coffee Time respects and protects the privacy of its users. This privacy policy explains what data we collect, how we use it, and your rights.
 
@@ -10,16 +10,18 @@ Coffee Time does not collect personally identifiable information such as your na
 
 However, the app:
 
-    - Stores user preferences, profile information (such as name, country, favorite coffee, notification settings), and coffee log data locally on your device using AsyncStorage and Zustand global state. This data is only used within the app to provide a personalized experience and is never sent to any server or third party.
+    - Stores user preferences, profile information (such as name, country, favorite coffee, notification settings), coffee log data, water intake and water stats locally on your device using AsyncStorage and Zustand global state with persist. This data is only used within the app to provide a personalized experience and is never sent to any server or third party.
+    - Stores all water tracking (intake, stats, streaks, glass size) locally on your device.
+    - Shows toast notifications for reminders and news, but no personal data is sent or shared.
     - Fetches coffee-related information (e.g. coffee types, details, recommendations) from an external API. No personal information is sent to this API.
 
 2. Information Sharing
 
-We do not share your personal data with any third parties. All local data (saved via AsyncStorage and Zustand) stays on your device.
+We do not share your personal data with any third parties. All local data (saved via AsyncStorage and Zustand persist) stays on your device and is never shared or sold.
 
 3. Information Storage
 
-We do not store any personal data on our servers. All data you save (e.g. preferences, profile, coffee log) is stored locally on your device and is persisted using AsyncStorage and Zustand global state.
+We do not store any personal data on our servers. All data you save (e.g. preferences, profile, coffee log, water intake, water stats) is stored locally on your device and is persisted using AsyncStorage and Zustand global state with persist. Nothing is uploaded or shared externally.
 
 4. Changes to This Policy
 

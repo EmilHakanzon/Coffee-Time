@@ -60,16 +60,6 @@ Built with Expo, TypeScript, and a beautiful coffee-inspired design.
 
 ---
 
-## 🛠️ Build
-
-To build for production (Android/iOS):
-
-```sh
-npx eas build -p android
-npx eas build -p ios
-```
-
----
 
 ## 🗂️ Project Structure
 

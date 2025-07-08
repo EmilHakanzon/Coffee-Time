@@ -3,7 +3,7 @@ import DrinkCoffeeButton from "@/src/components/homepage/DrinkCoffeeButton";
 import { useCoffeeHome } from "@/src/hooks/useCoffeeHome";
 import { useProfileStore } from "@/src/store/profilestore";
 import { Ionicons } from "@expo/vector-icons";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import styles from "../../src/styles/HomeScreen.styles";
 import {
@@ -54,6 +54,11 @@ export default function HomeScreen() {
   const handleLogWater = () => {
     setWaterLog([Date.now(), ...waterLog]);
   };
+  useEffect(() => {
+    if (coffeeLog.length > 0 && coffeeLog[0]?.coffeeType) {
+      setSelectedCoffeeType(coffeeLog[0].coffeeType);
+    }
+  }, [coffeeLog, setSelectedCoffeeType]);
 
   return (
     <ScrollView style={styles.container}>

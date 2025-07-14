@@ -1,7 +1,6 @@
 import styles from "@/src/styles/settingPage";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import Slider from "@react-native-community/slider";
-import React from "react";
+import React, { useRef, useState } from "react";
 import { Text } from "react-native";
 
 export default function ReminderSlider({
@@ -11,21 +10,30 @@ export default function ReminderSlider({
   reminderHours: number;
   setReminderHours: (v: number) => void;
 }) {
-  // Sätter värdet och sparar till AsyncStorage
-  const handleSliderChange = async (value: number) => {
-    setReminderHours(value);
-  };
+  // Lokalt state för att visa värdet direkt när man drar
+  const [localValue, setLocalValue] = useState(reminderHours);
+  const isSliding = useRef(false);
 
   return (
     <>
-      <Text style={styles.label}>Coffee Reminder (hours): {reminderHours}</Text>
+      <Text style={styles.label}>
+        Coffee Reminder (hours):{" "}
+        {isSliding.current ? localValue : reminderHours}
+      </Text>
       <Slider
         style={{ width: "100%", height: 40 }}
         minimumValue={1}
         maximumValue={12}
         step={1}
         value={reminderHours}
-        onValueChange={handleSliderChange}
+        onValueChange={(value) => {
+          isSliding.current = true;
+          setLocalValue(Math.round(value));
+        }}
+        onSlidingComplete={(value) => {
+          isSliding.current = false;
+          setReminderHours(Math.round(value));
+        }}
         minimumTrackTintColor="#8B4513"
         maximumTrackTintColor="#ccc"
         thumbTintColor="#8B4513"

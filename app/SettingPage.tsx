@@ -34,6 +34,10 @@ export default function SettingPage() {
   const { hotCoffees, icedCoffees, loading } = useCoffeeTypes();
   const [showCountryPicker, setShowCountryPicker] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [showGlassInput, setShowGlassInput] = useState(false);
+  const [glassInput, setGlassInput] = useState(glassSize.toString());
+  const [showReminderInput, setShowReminderInput] = useState(false);
+  const [reminderInput, setReminderInput] = useState(reminderHours.toString());
 
   const allCoffees = [...hotCoffees, ...icedCoffees];
   const router = useRouter();
@@ -161,6 +165,8 @@ export default function SettingPage() {
               ))}
             </Picker>
           )}
+
+          {/* Reminder Hours Slider */}
 
           <ReminderSlider
             reminderHours={reminderHours}

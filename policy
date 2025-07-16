@@ -1,6 +1,6 @@
 Privacy Policy for Coffee Time
 
-Last updated: 2025-06-29
+Last updated: 2025-07-16
 
 Your privacy is important to us. Coffee Time respects and protects the privacy of its users. This privacy policy explains what data we collect, how we use it, and your rights.
 
@@ -13,7 +13,7 @@ However, the app:
     - Stores user preferences, profile information (such as name, country, favorite coffee, notification settings), coffee log data, water intake and water stats locally on your device using AsyncStorage and Zustand global state with persist. This data is only used within the app to provide a personalized experience and is never sent to any server or third party.
     - Stores all water tracking (intake, stats, streaks, glass size) locally on your device.
     - Shows toast notifications for reminders and news, but no personal data is sent or shared.
-    - Fetches coffee-related information (e.g. coffee types, details, recommendations) from an external API. No personal information is sent to this API.
+    - Fetches coffee-related information (e.g. coffee types, details, recommendations) from my own data object. Not using any api for the object all is from my own. 
 
 2. Information Sharing
 

@@ -40,7 +40,7 @@ Built with Expo, TypeScript, and a beautiful coffee-inspired design.
 
 ## 🚀 Getting Started
 
-# Google play store:
+### Google play store:
 - **Coffee Time:**
  https://play.google.com/apps/testing/com.emilhakanzon.coffeetime
 

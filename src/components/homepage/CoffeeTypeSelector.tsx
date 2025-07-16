@@ -23,8 +23,23 @@ export default function CoffeeTypeSelector({
   const { hotCoffees, icedCoffees, loading } = useCoffeeTypes();
   const [category, setCategory] = useState<"hot" | "ice">("hot");
   const [imgErrors, setImgErrors] = useState<{ [id: number]: boolean }>({});
+  const [customCoffees, setCustomCoffees] = useState<CoffeeType[]>([]);
 
-  const coffeeTypes = category === "hot" ? hotCoffees : icedCoffees;
+  React.useEffect(() => {
+    // Ladda egna kaffe-typer från AsyncStorage
+    (async () => {
+      const data = await import(
+        "@react-native-async-storage/async-storage"
+      ).then((m) => m.default.getItem("custom_coffees"));
+      if (data) setCustomCoffees(JSON.parse(data));
+    })();
+  }, []);
+
+  // Kombinera hårdkodade och egna kaffe-typer
+  const coffeeTypes = [
+    ...(category === "hot" ? hotCoffees : icedCoffees),
+    ...customCoffees.filter((c) => (category === "hot" ? !c.iced : c.iced)),
+  ];
 
   return (
     <View>

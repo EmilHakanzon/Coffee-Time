@@ -27,6 +27,8 @@ export default function CoffeeTypePage() {
   // Egna kaffe-typer (laddas från AsyncStorage)
   const [customCoffees, setCustomCoffees] = useState<CoffeeType[]>([]);
   const [showAddModal, setShowAddModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editCoffeeIndex, setEditCoffeeIndex] = useState<number | null>(null);
   const [newCoffee, setNewCoffee] = useState<
     Partial<CoffeeType & { iced?: boolean }>
   >({
@@ -36,6 +38,9 @@ export default function CoffeeTypePage() {
     ingredients: [],
     iced: false,
   });
+  const [editCoffee, setEditCoffee] = useState<
+    Partial<CoffeeType & { iced?: boolean }>
+  >({});
 
   React.useEffect(() => {
     // Ladda egna kaffe-typer från AsyncStorage
@@ -50,9 +55,12 @@ export default function CoffeeTypePage() {
   }, [customCoffees]);
 
   // Kombinera hårdkodade och egna kaffe-typer
+  const filteredCustomCoffees = customCoffees.filter((c) =>
+    category === "hot" ? !c.iced : c.iced,
+  );
   const coffeeTypes = [
     ...getFilteredCoffeeTypes(hotCoffees, icedCoffees, category),
-    ...customCoffees.filter((c) => (category === "hot" ? !c.iced : c.iced)),
+    ...filteredCustomCoffees,
   ];
 
   // Hantera nytt kaffe
@@ -86,6 +94,55 @@ export default function CoffeeTypePage() {
       ingredients: [],
       iced: false,
     });
+  };
+
+  // Hantera borttagning av egen kaffe-typ
+  const handleDeleteCoffee = (id: number) => {
+    Alert.alert(
+      "Ta bort kaffe-typ",
+      "Är du säker på att du vill ta bort denna kaffe-typ?",
+      [
+        { text: "Avbryt", style: "cancel" },
+        {
+          text: "Ta bort",
+          style: "destructive",
+          onPress: () => {
+            setCustomCoffees(customCoffees.filter((c) => c.id !== id));
+          },
+        },
+      ],
+    );
+  };
+
+  // Hantera redigering av egen kaffe-typ
+  const handleEditCoffee = () => {
+    if (
+      editCoffeeIndex === null ||
+      !editCoffee.title ||
+      !editCoffee.description
+    ) {
+      Alert.alert("Please enter a name and description for your coffee type.");
+      return;
+    }
+    setCustomCoffees((prev) => {
+      const updated = [...prev];
+      updated[editCoffeeIndex] = {
+        ...updated[editCoffeeIndex],
+        title: editCoffee.title!,
+        description: editCoffee.description!,
+        image: editCoffee.image || "",
+        ingredients: Array.isArray(editCoffee.ingredients)
+          ? editCoffee.ingredients
+          : (editCoffee.ingredients || "")
+              .toString()
+              .split(",")
+              .map((s) => s.trim()),
+      };
+      return updated;
+    });
+    setShowEditModal(false);
+    setEditCoffeeIndex(null);
+    setEditCoffee({});
   };
 
   React.useEffect(() => {
@@ -152,15 +209,30 @@ export default function CoffeeTypePage() {
         />
       ) : (
         <ScrollView>
-          {coffeeTypes.map((coffee) => (
-            <CoffeeItem
-              key={coffee.id}
-              coffee={coffee}
-              onPress={() => {
-                setSelectedCoffee(coffee);
-                setModalImgError(false);
-              }}
-            />
+          {/* Visa hårdkodade kaffe-typer */}
+          {getFilteredCoffeeTypes(hotCoffees, icedCoffees, category).map(
+            (coffee) => (
+              <CoffeeItem
+                key={coffee.id}
+                coffee={coffee}
+                onPress={() => {
+                  setSelectedCoffee(coffee);
+                  setModalImgError(false);
+                }}
+              />
+            ),
+          )}
+          {/* Visa egna kaffe-typer med redigera/ta bort */}
+          {filteredCustomCoffees.map((coffee) => (
+            <View key={coffee.id} style={{ marginBottom: 10 }}>
+              <CoffeeItem
+                coffee={coffee}
+                onPress={() => {
+                  setSelectedCoffee(coffee);
+                  setModalImgError(false);
+                }}
+              />
+            </View>
           ))}
         </ScrollView>
       )}
@@ -175,6 +247,40 @@ export default function CoffeeTypePage() {
         imgError={modalImgError}
         setImgError={setModalImgError}
         onClose={() => setSelectedCoffee(null)}
+        extraButtons={
+          selectedCoffee &&
+          customCoffees.some((c) => c.id === selectedCoffee.id) ? (
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "center",
+                gap: 12,
+                marginTop: 16,
+              }}
+            >
+              <Button
+                title="Edit"
+                color="#6B705C"
+                onPress={() => {
+                  setEditCoffeeIndex(
+                    customCoffees.findIndex((c) => c.id === selectedCoffee.id),
+                  );
+                  setEditCoffee({ ...selectedCoffee });
+                  setShowEditModal(true);
+                  setSelectedCoffee(null);
+                }}
+              />
+              <Button
+                title="Delete"
+                color="#B08968"
+                onPress={() => {
+                  handleDeleteCoffee(selectedCoffee.id);
+                  setSelectedCoffee(null);
+                }}
+              />
+            </View>
+          ) : null
+        }
       />
       <AddCoffeeModal
         visible={showAddModal}
@@ -182,6 +288,17 @@ export default function CoffeeTypePage() {
         setNewCoffee={setNewCoffee}
         onCancel={() => setShowAddModal(false)}
         onAdd={handleAddCoffee}
+      />
+      {/* Enkel modal för redigering */}
+      <AddCoffeeModal
+        visible={showEditModal}
+        newCoffee={editCoffee}
+        setNewCoffee={setEditCoffee}
+        onCancel={() => {
+          setShowEditModal(false);
+          setEditCoffeeIndex(null);
+        }}
+        onAdd={handleEditCoffee}
       />
     </View>
   );

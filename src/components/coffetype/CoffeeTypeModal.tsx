@@ -14,12 +14,14 @@ export default function CoffeeTypeModal({
   imgError,
   setImgError,
   onClose,
+  extraButtons,
 }: {
   visible: boolean;
   coffee: CoffeeType | null;
   imgError: boolean;
   setImgError: (v: boolean) => void;
   onClose: () => void;
+  extraButtons?: React.ReactNode;
 }) {
   return (
     <Modal
@@ -59,6 +61,7 @@ export default function CoffeeTypeModal({
           <Pressable style={styles.closeButton} onPress={onClose}>
             <Text style={styles.closeButtonText}>Close</Text>
           </Pressable>
+          {extraButtons}
         </View>
       </View>
     </Modal>

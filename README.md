@@ -17,6 +17,12 @@ Built with Expo, TypeScript, and a beautiful coffee-inspired design.
 - 🧊 **Hot & Iced Coffee Explorer:**  
   Browse and learn about a variety of hot and iced coffee types.
 
+- ☕️ **Create coffee types:**
+    Create your own Coffee types.
+
+- 💧 **Water Reminder & intake:**
+    Water reminder text for evey log. Water intake for daily water goal. Setting update with water slider for Customization water ml intake.
+
 - 👤 **Profile & Settings:**  
   Personalize your name and reminder interval.
 
@@ -27,8 +33,6 @@ Built with Expo, TypeScript, and a beautiful coffee-inspired design.
 
 # 🌟 Coming Soon
 
-    🔔 Push Notifications
-    Get notified on your device when it’s time for your next coffee break.(inproggres)
 
  📍 Deploy to Google play store(out for test)
  
@@ -36,25 +40,9 @@ Built with Expo, TypeScript, and a beautiful coffee-inspired design.
 
 ## 🚀 Getting Started
 
-1. **Clone the repository**
-   ```sh
-   git clone https://github.com/yourusername/coffee-time.git
-   cd coffee-time
-   ```
-
-2. **Install dependencies**
-   ```sh
-   npm install
-   ```
-
-3. **Start the app**
-   ```sh
-   npx expo start
-   ```
-
-4. **Run on your device**
-   - Scan the QR code with Expo Go (iOS/Android)
-   - Or run on an emulator
+# Google play store:
+- **Coffee Time:**
+ https://play.google.com/apps/testing/com.emilhakanzon.coffeetime
 
 ---
 
